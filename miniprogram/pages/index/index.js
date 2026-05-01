@@ -15,13 +15,48 @@ Page({
     highlightId: null,
     offlineCount: 0,
   },
-  onLoad() { this.loadFirstPage() },
+  onLoad() { /* 等 onShow 时再决定加载，避免 bootstrapping 中冲突 */ },
   onShow() {
+    this.bootstrapAndShow()
+  },
+  bootstrapAndShow(retried) {
     const app = getApp()
-    if (!app.globalData.family) {
-      wx.reLaunch({ url: '/pages/join/join' })
+    if (app.globalData.family) {
+      this.continueShow()
       return
     }
+    // 没 family：可能是冷启动 relogin 还没完成（bootstrapping=true），等等看
+    if (app.globalData.bootstrapping) {
+      wx.showLoading({ title: '加载中…', mask: true })
+      const start = Date.now()
+      const tick = () => {
+        if (app.globalData.family) {
+          wx.hideLoading()
+          this.continueShow()
+          return
+        }
+        if (!app.globalData.bootstrapping) {
+          wx.hideLoading()
+          // bootstrapping 已结束但仍无 family → 真没家庭 → 跳 join
+          wx.reLaunch({ url: '/pages/join/join' })
+          return
+        }
+        if (Date.now() - start > 8000) {
+          wx.hideLoading()
+          wx.showToast({ title: '加载超时，请重试', icon: 'none' })
+          wx.reLaunch({ url: '/pages/join/join' })
+          return
+        }
+        setTimeout(tick, 200)
+      }
+      tick()
+      return
+    }
+    // 不在 bootstrapping 也没 family → 真无家庭
+    wx.reLaunch({ url: '/pages/join/join' })
+  },
+  continueShow() {
+    const app = getApp()
     const pending = wx.getStorageSync('pending_highlight_id')
     if (pending) {
       wx.removeStorageSync('pending_highlight_id')

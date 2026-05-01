@@ -15,6 +15,7 @@ App({
     user: null,
     family: null,
     apiBase: 'https://glucose-api.bwton.com/api/v1',
+    bootstrapping: false, // 冷启动 relogin 进行中标记
   },
   onLaunch(options) {
     const token = wx.getStorageSync('token')
@@ -26,14 +27,17 @@ App({
 
     const sharedCode = options && options.query ? options.query.code : ''
     if (!this.globalData.token) {
+      this.globalData.bootstrapping = true
       const { relogin } = require('./utils/api.js')
       relogin().then((res) => {
+        this.globalData.bootstrapping = false
         if (!res.family) {
           wx.reLaunch({ url: `/pages/join/join${sharedCode ? `?code=${sharedCode}` : ''}` })
         } else {
           tryFlushOffline()
         }
       }).catch(() => {
+        this.globalData.bootstrapping = false
         wx.reLaunch({ url: `/pages/join/join${sharedCode ? `?code=${sharedCode}` : ''}` })
       })
       return
