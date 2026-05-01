@@ -31,6 +31,7 @@ Page({
     recording: false,
     recordHint: '',
     voiceDisabled: false,
+    cancelling: false,
   },
   onLoad(query) {
     const now = roundTo5Min(new Date())
@@ -172,7 +173,12 @@ Page({
       this.setData({ recording: true, error: '', recordHint: '正在录音…松开识别' })
     })
     rm.onStop((res) => {
-      this.setData({ recording: false, recordHint: '' })
+      const wasCancelling = this.data.cancelling
+      this.setData({ recording: false, recordHint: '', cancelling: false })
+      if (wasCancelling) {
+        wx.showToast({ title: '已取消', icon: 'none', duration: 800 })
+        return
+      }
       if (!res || !res.tempFilePath) return
       if (res.duration < 800) {
         this.setData({ error: '录音太短，至少说一句话' })
@@ -203,14 +209,17 @@ Page({
     })
     this.recorderManager = rm
   },
-  onVoiceTouchStart() {
+  onVoiceTouchStart(e) {
     this.ensureRecorder()
     // 防御：如果 recorder 仍在 running 状态，先强制 stop 清状态再 start
     if (this.data.recording) {
-      try { this.recorderManager.stop() } catch (e) { /* noop */ }
+      try { this.recorderManager.stop() } catch (err) { /* noop */ }
       this.setData({ recording: false, recordHint: '' })
     }
-    this.setData({ error: '' })
+    this.setData({ error: '', cancelling: false })
+    // 记录起始 Y，用于检测上滑取消
+    const touch = e && e.touches && e.touches[0]
+    this._touchStartY = touch ? touch.clientY : 0
     setTimeout(() => {
       try {
         this.recorderManager.start({
@@ -220,19 +229,31 @@ Page({
           encodeBitRate: 48000,
           format: 'mp3',
         })
-      } catch (e) {
+      } catch (err) {
         this.setData({ error: '录音启动失败，请重试' })
       }
     }, 80)
   },
+  onVoiceTouchMove(e) {
+    if (!this.data.recording) return
+    const touch = e && e.touches && e.touches[0]
+    if (!touch) return
+    const deltaY = this._touchStartY - touch.clientY  // 上滑为正
+    const shouldCancel = deltaY > 60  // 上滑超 60px = 取消
+    if (shouldCancel !== this.data.cancelling) {
+      this.setData({ cancelling: shouldCancel })
+    }
+  },
   onVoiceTouchEnd() {
     if (this.data.recording && this.recorderManager) {
-      try { this.recorderManager.stop() } catch (e) { /* noop */ }
+      try { this.recorderManager.stop() } catch (err) { /* noop */ }
     }
   },
   onVoiceTouchCancel() {
+    // 系统打断（来电、滑出可视区）等，按取消处理
     if (this.data.recording && this.recorderManager) {
-      try { this.recorderManager.stop() } catch (e) { /* noop */ }
+      this.setData({ cancelling: true })
+      try { this.recorderManager.stop() } catch (err) { /* noop */ }
     }
   },
   async uploadVoice(filePath) {

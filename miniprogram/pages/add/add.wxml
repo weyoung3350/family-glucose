@@ -36,19 +36,27 @@
   <!-- ============ AI 一句话 ============ -->
   <block wx:if="{{mode === 'ai'}}">
     <view class="card input-card">
-      <textarea value="{{text}}" bindinput="onTextInput" placeholder="试试说：早上 9:20 空腹血糖 11.1，吃了二甲双胍" auto-focus maxlength="200" />
-      <view class="input-actions">
-        <text class="hint">{{recording ? '录音中…松开识别' : '可以打字，也可以长按下方按钮说话'}}</text>
-        <text class="clear" bindtap="onClear">清空</text>
+      <view class="ai-tip">
+        <block wx:if="{{recording}}">
+          <text wx:if="{{cancelling}}" style="color:#F5222D">↑ 松开取消（上滑离开按钮）</text>
+          <text wx:else>录音中…松开发送，上滑取消</text>
+        </block>
+        <block wx:elif="{{parsing}}">识别中…</block>
+        <block wx:else>长按下方按钮说话，例如：早上 9 点空腹血糖 7 点 8</block>
       </view>
-      <view wx:if="{{!voiceDisabled}}" class="voice-btn {{recording ? 'recording' : ''}}"
+      <view wx:if="{{text}}" class="ai-transcribed">
+        <text class="ai-transcribed-label">已识别原文：</text>
+        <text class="ai-transcribed-text">{{text}}</text>
+      </view>
+      <view wx:if="{{!voiceDisabled}}" class="voice-btn-big {{recording ? 'recording' : ''}} {{cancelling ? 'cancelling' : ''}}"
             bindtouchstart="onVoiceTouchStart"
+            bindtouchmove="onVoiceTouchMove"
             bindtouchend="onVoiceTouchEnd"
             bindtouchcancel="onVoiceTouchCancel">
         <view class="voice-dot"></view>
-        <text>{{recording ? '松开发送' : '按住说话'}}</text>
+        <text>{{cancelling ? '松开取消' : (recording ? '松开发送' : '按住说话')}}</text>
       </view>
-      <view class="btn-primary recognize-btn {{(text && !parsing) ? '' : 'disabled'}}" bindtap="onRecognize">{{parsing ? (recordHint || '识别中…') : '点击识别'}}</view>
+      <view wx:if="{{voiceDisabled}}" class="hint" style="text-align: center; padding: 24rpx;">语音功能开通中，请改用"手动录入"</view>
       <view wx:if="{{error}}" class="error">{{error}}</view>
     </view>
 

@@ -14,17 +14,16 @@
 .save-bar { position: fixed; left: 24rpx; right: 24rpx; bottom: calc(env(safe-area-inset-bottom) + 20rpx); }
 
 /* AI 模式 */
-.input-card textarea { width: 100%; min-height: 180rpx; font-size: 32rpx; line-height: 1.6; }
-.input-actions { display: flex; align-items: center; gap: 14rpx; color: #86909C; margin: 18rpx 0; font-size: 26rpx; }
-.input-actions .hint { color: #86909C; }
-.clear { margin-left: auto; color: #F08A2C; }
-.voice-btn { display: flex; align-items: center; justify-content: center; gap: 14rpx; height: 96rpx; border-radius: 999rpx; background: #FFF7ED; border: 2rpx solid #FFD9A8; color: #F08A2C; font-size: 30rpx; font-weight: 700; margin-top: 12rpx; user-select: none; }
-.voice-btn.recording { background: #FF9F40; border-color: #FF9F40; color: #FFFFFF; }
-.voice-dot { width: 14rpx; height: 14rpx; border-radius: 50%; background: #F08A2C; }
-.voice-btn.recording .voice-dot { background: #FFFFFF; animation: voicePulse 0.8s infinite; }
+.ai-tip { color: #4E5969; font-size: 28rpx; line-height: 1.6; text-align: center; padding: 18rpx 12rpx; }
+.ai-transcribed { background: #FFF7ED; border-radius: 18rpx; padding: 20rpx 24rpx; margin: 8rpx 0 20rpx; }
+.ai-transcribed-label { display: block; color: #86909C; font-size: 24rpx; margin-bottom: 8rpx; }
+.ai-transcribed-text { font-size: 32rpx; color: #1F2329; line-height: 1.5; }
+.voice-btn-big { display: flex; align-items: center; justify-content: center; gap: 18rpx; height: 140rpx; border-radius: 999rpx; background: #FF9F40; color: #FFFFFF; font-size: 38rpx; font-weight: 800; box-shadow: 0 16rpx 34rpx rgba(255,159,64,.35); margin-top: 12rpx; user-select: none; transition: background .15s ease; }
+.voice-btn-big.recording { background: #F5222D; box-shadow: 0 16rpx 34rpx rgba(245,34,45,.4); }
+.voice-btn-big.cancelling { background: #86909C; box-shadow: 0 16rpx 34rpx rgba(31,35,41,.25); }
+.voice-btn-big .voice-dot { width: 18rpx; height: 18rpx; border-radius: 50%; background: #FFFFFF; flex-shrink: 0; }
+.voice-btn-big.recording .voice-dot { animation: voicePulse 0.8s infinite; }
 @keyframes voicePulse { 0%,100% { transform: scale(1); opacity: 1 } 50% { transform: scale(1.6); opacity: .5 } }
-.recognize-btn { margin-top: 12rpx; }
-.recognize-btn.disabled { opacity: .45; }
 .error,.missing { color: #F5222D; font-size: 28rpx; margin-top: 14rpx; }
 .missing { background: #FFF1F0; padding: 18rpx 24rpx; border-radius: 18rpx; margin-bottom: 20rpx; }
 .card-title { color: #86909C; font-size: 28rpx; margin-bottom: 12rpx; }
