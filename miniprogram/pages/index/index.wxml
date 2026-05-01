@@ -1,0 +1,30 @@
+<view class="page home-page" wx:if="{{family}}">
+  <view wx:if="{{offlineCount > 0}}" class="offline-banner">有 {{offlineCount}} 条记录待同步，连网后自动上传</view>
+  <view class="hero">
+    <view>
+      <view class="title">{{family.name}}的血糖记录</view>
+      <view class="subtitle">{{todayLabel}}</view>
+    </view>
+    <view class="today-stat">
+      <view class="num">{{todayCount}}</view>
+      <view class="lbl">次 · 今日</view>
+    </view>
+  </view>
+
+  <view class="day-section" wx:for="{{groups}}" wx:key="date">
+    <view class="day-label">{{item.label}}</view>
+    <record-card wx:for="{{item.items}}" wx:for-item="rec" wx:key="id" record="{{rec}}" highlight="{{rec.id === highlightId}}" bind:tap="onCardTap" />
+  </view>
+
+  <view wx:if="{{!hasMore && groups.length}}" class="end-tip">没有更多记录</view>
+  <view wx:if="{{!groups.length && !loading}}" class="empty">
+    <view class="drop">糖</view>
+    <view>今天还没有记录</view>
+    <view class="hint">点底部按钮记一次</view>
+  </view>
+
+  <view class="fab-row">
+    <view class="fab-main" bindtap="onAddTap">＋ 记一次血糖</view>
+    <view class="fab-mic" bindtap="onMicTap"><image src="/images/mic.png" mode="aspectFit" /></view>
+  </view>
+</view>

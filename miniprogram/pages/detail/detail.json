@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "记录详情",
+  "usingComponents": {
+    "glucose-chip": "/components/glucose-chip/glucose-chip"
+  }
+}

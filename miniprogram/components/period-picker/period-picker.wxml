@@ -1,0 +1,11 @@
+<view class="period-picker">
+  <view class="meals">
+    <view wx:for="{{meals}}" wx:key="key" data-key="{{item.key}}" bindtap="onMealPick" class="meal {{currentMeal === item.key ? 'active' : ''}}">
+      {{item.label}}
+    </view>
+  </view>
+  <view wx:if="{{showBeforeAfter}}" class="ba-row">
+    <view data-ba="before" bindtap="onBaPick" class="ba-chip {{currentBa === 'before' ? 'active' : ''}}">餐前</view>
+    <view data-ba="after" bindtap="onBaPick" class="ba-chip {{currentBa === 'after' ? 'active' : ''}}">餐后</view>
+  </view>
+</view>

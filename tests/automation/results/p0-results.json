@@ -1,0 +1,27 @@
+{
+  "runAt": "2026-04-30T15:04:27.990Z",
+  "total": 3,
+  "pass": 3,
+  "fail": 0,
+  "skip": 0,
+  "cases": [
+    {
+      "name": "P0-1 · AI 录入卡片显示 AI 角标，普通卡片不显示",
+      "status": "pass",
+      "detail": "aiTag=4 cards=10",
+      "ts": 1777561458945
+    },
+    {
+      "name": "P0-2 · 新建记录后高亮卡片，2s 后高亮消失",
+      "status": "pass",
+      "detail": "初始高亮 1，3s 后归零",
+      "ts": 1777561462747
+    },
+    {
+      "name": "P0-3 · 家庭管理页成员 joined_at 渲染为「加入于 YYYY-MM-DD」",
+      "status": "pass",
+      "detail": "1/1 节点格式正确",
+      "ts": 1777561467990
+    }
+  ]
+}

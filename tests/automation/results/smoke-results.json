@@ -1,0 +1,51 @@
+{
+  "runAt": "2026-04-30T15:07:22.233Z",
+  "total": 7,
+  "pass": 7,
+  "fail": 0,
+  "skip": 0,
+  "cases": [
+    {
+      "name": "后端 health 正常",
+      "status": "pass",
+      "detail": "家有糖人 0.1.0",
+      "ts": 1777561588511
+    },
+    {
+      "name": "微信登录态与家庭就绪",
+      "status": "pass",
+      "detail": "family=df",
+      "ts": 1777561604908
+    },
+    {
+      "name": "首页渲染与触控尺寸达标",
+      "status": "pass",
+      "detail": "title=df的血糖记录",
+      "ts": 1777561610251
+    },
+    {
+      "name": "手动录入真实表单保存成功",
+      "status": "pass",
+      "detail": "今日记录数已增加",
+      "ts": 1777561617617
+    },
+    {
+      "name": "AI 一句话解析并保存成功",
+      "status": "pass",
+      "detail": "AI 解析 value=9.9 period=fasting",
+      "ts": 1777561625476
+    },
+    {
+      "name": "统计页矩阵/趋势/报表加载成功",
+      "status": "pass",
+      "detail": "matrix/chart/report 均有数据",
+      "ts": 1777561632398
+    },
+    {
+      "name": "我的页与导出预览可用",
+      "status": "pass",
+      "detail": "未触发 CSV 分享",
+      "ts": 1777561642233
+    }
+  ]
+}

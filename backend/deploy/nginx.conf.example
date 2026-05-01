@@ -1,0 +1,52 @@
+# /etc/nginx/conf.d/glucose-api.conf
+# 与 card.bwton.com（电子名片）独立的 server 块，互不影响。
+# 限流 zone 已在 nginx.conf http 块里定义（电子名片项目添加），可直接复用：
+#   limit_req_zone $http_x_forwarded_for zone=api_login:10m rate=5r/m;
+#   limit_req_zone $http_x_forwarded_for zone=api_general:10m rate=60r/m;
+# 若不存在请补到 /etc/nginx/nginx.conf 的 http 块里。
+
+server {
+    listen 80;
+    server_name glucose-api.bwton.com;
+
+    # HTTPS 证书签好后改成 443 + ssl，暂用 80 走通流程（也可由前置 LB 处理 TLS）
+    client_max_body_size 1m;
+
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+
+    # 登录限流（5次/分钟）
+    location = /api/v1/auth/login {
+        limit_req zone=api_login burst=3 nodelay;
+        proxy_pass http://127.0.0.1:8082;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    # 其他通用限流（60次/分钟）
+    location /api/ {
+        limit_req zone=api_general burst=20 nodelay;
+        proxy_pass http://127.0.0.1:8082;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_read_timeout 30s;
+        proxy_connect_timeout 5s;
+    }
+
+    location = /health {
+        return 200 "ok";
+        add_header Content-Type text/plain;
+    }
+
+    # 屏蔽根路径（小程序后端不需要 web 入口）
+    location = / {
+        return 404;
+    }
+}

@@ -1,0 +1,21 @@
+<view class="page detail-page" wx:if="{{record}}">
+  <view class="card hero-card">
+    <view class="more" wx:if="{{isMine}}" bindtap="onMore">···</view>
+    <view class="value" style="color: {{record.status.color}}">{{record.value}}</view>
+    <view class="unit">mmol/L</view>
+    <glucose-chip level="{{record.status.level}}" label="{{record.status.label}}" />
+    <view class="range">理想范围 {{record.status.target_low}} ~ {{record.status.target_high}}</view>
+  </view>
+  <view class="card meta">
+    <view><text>时段</text><text>{{record.period_label}}</text></view>
+    <view><text>测量时间</text><text>{{record.measuredText}}</text></view>
+    <view><text>记录人</text><text>{{record.recorder.nickname || '家人'}}</text></view>
+    <view><text>记录时间</text><text>{{record.createdText}}</text></view>
+    <view><text>备注</text><text>{{record.note || '（无备注）'}}</text></view>
+    <view wx:if="{{record.source === 'ai'}}"><text>来源</text><text class="ai-tag">AI 录入</text></view>
+  </view>
+  <view class="actions" wx:if="{{isMine}}">
+    <view class="btn-ghost" bindtap="onEdit">编辑</view>
+    <view class="danger" bindtap="onDelete">删除</view>
+  </view>
+</view>

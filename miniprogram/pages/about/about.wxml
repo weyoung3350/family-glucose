@@ -1,0 +1,15 @@
+<view class="page about-page">
+  <image class="logo" src="/images/icon-256.png" mode="aspectFit" />
+  <view class="name">家有糖人</view>
+  <view class="version">{{version}} · 家庭内部使用</view>
+  <view class="card menu">
+    <view bindtap="showUsage"><text>使用说明</text><text>›</text></view>
+    <view bindtap="showPrivacy"><text>隐私说明</text><text>›</text></view>
+    <view bindtap="copyEmail"><text>联系开发者</text><text>复制邮箱</text></view>
+  </view>
+  <view class="card changelog">
+    <view class="log-title">v0.1 更新</view>
+    <view class="log-text">支持家庭协作、手动/AI 录入、血糖颜色分级、趋势分析、离线暂存与 CSV 导出。颜色判断会结合家庭自定义标准，帮助家人更快理解记录状态。</view>
+  </view>
+  <view class="notice">本小程序仅供本家庭成员记录与查看血糖数据使用，不构成医疗建议，请遵医嘱。</view>
+</view>

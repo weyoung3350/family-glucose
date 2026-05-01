@@ -1,0 +1,19 @@
+<view class="record-card {{highlight ? 'highlight' : ''}}" bindtap="onTap">
+  <view class="value-block" style="color: {{record.status.color}}">
+    <text class="value">{{record.value}}</text>
+    <text class="unit">mmol/L</text>
+  </view>
+  <view class="main">
+    <view class="row">
+      <text class="period">{{record.period_label}}</text>
+      <text wx:if="{{isAi}}" class="ai-tag">AI</text>
+      <text class="time">{{displayTime}}</text>
+    </view>
+    <view class="row sub">
+      <text class="avatar">{{avatarText}}</text>
+      <text>{{recorderText}}</text>
+      <text wx:if="{{noteText}}"> · {{noteText}}</text>
+    </view>
+  </view>
+  <view class="status" style="background: {{record.status.color}}; color: {{record.status.text_color || '#FFFFFF'}}">{{record.status.label}}</view>
+</view>

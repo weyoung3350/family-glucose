@@ -1,0 +1,14 @@
+<view class="page export-page">
+  <view class="range-row">
+    <view wx:for="{{ranges}}" wx:key="*this" data-days="{{item}}" bindtap="onRangeTap" class="{{days === item ? 'active' : ''}}">最近 {{item}} 天</view>
+  </view>
+  <view class="card preview">
+    <view class="title">将导出</view>
+    <view>· 时间范围：{{from}} ~ {{to}}</view>
+    <view>· 共 {{total}} 条记录</view>
+    <view>· 字段：日期 / 时间 / 时段 / 血糖值 / 状态 / 记录人 / 备注</view>
+    <view>· 格式：CSV（可用 Excel 打开）</view>
+  </view>
+  <view class="btn-primary" bindtap="onDownload">生成并分享 CSV</view>
+  <view class="tip">生成后可直接转发给医生或保存到聊天</view>
+</view>

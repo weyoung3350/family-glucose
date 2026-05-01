@@ -1,0 +1,22 @@
+.record-card {
+  background: #FFFFFF;
+  border-radius: 28rpx;
+  padding: 28rpx;
+  margin-bottom: 20rpx;
+  display: flex;
+  align-items: center;
+  gap: 22rpx;
+  box-shadow: 0 8rpx 28rpx rgba(31, 35, 41, 0.05);
+}
+.value-block { width: 180rpx; }
+.value { font-size: 58rpx; font-weight: 800; line-height: 1; }
+.unit { display: block; margin-top: 6rpx; color: #86909C; font-size: 22rpx; }
+.main { flex: 1; min-width: 0; }
+.row { display: flex; align-items: center; justify-content: space-between; gap: 12rpx; }
+.period { background: #FFF3E8; color: #F08A2C; padding: 8rpx 18rpx; border-radius: 999rpx; font-size: 26rpx; }
+.time { color: #86909C; font-size: 26rpx; }
+.sub { justify-content: flex-start; margin-top: 18rpx; color: #4E5969; font-size: 26rpx; }
+.avatar { width: 40rpx; height: 40rpx; border-radius: 50%; background: #FFE4C7; color: #F08A2C; display: inline-flex; align-items: center; justify-content: center; text-align: center; margin-right: 8rpx; }
+.status { font-size: 24rpx; border-radius: 999rpx; padding: 8rpx 14rpx; font-weight: 600; min-width: 64rpx; text-align: center; flex-shrink: 0; }
+.ai-tag { background: #722ED1; color: #FFFFFF; font-size: 22rpx; padding: 4rpx 14rpx; border-radius: 999rpx; margin-left: 12rpx; font-weight: 700; letter-spacing: 1rpx; }
+.record-card.highlight { background: #FFF7ED; box-shadow: 0 8rpx 28rpx rgba(250, 140, 22, 0.25); transition: background .6s ease, box-shadow .6s ease; }

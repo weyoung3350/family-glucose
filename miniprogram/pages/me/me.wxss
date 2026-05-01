@@ -1,0 +1,7 @@
+.profile { background: linear-gradient(135deg, #FFB066, #FF9F40); color: #FFFFFF; border-radius: 32rpx; padding: 38rpx; display: flex; align-items: center; gap: 24rpx; margin-bottom: 24rpx; }
+.avatar { width: 108rpx; height: 108rpx; border-radius: 50%; background: rgba(255,255,255,.25); display: flex; align-items: center; justify-content: center; font-size: 48rpx; font-weight: 900; }
+.nickname { font-size: 40rpx; font-weight: 900; }
+.family { margin-top: 10rpx; opacity: .9; }
+.menu view { display: grid; grid-template-columns: 84rpx 1fr 30rpx; align-items: center; padding: 28rpx 0; border-bottom: 1rpx solid #F2F3F5; gap: 18rpx; }
+.icon { width: 64rpx; height: 64rpx; border-radius: 18rpx; background: #FFF3E8; color: #F08A2C; display: flex; align-items: center; justify-content: center; font-size: 32rpx; font-weight: 700; }
+.menu .arrow { color: #C9CDD4; font-size: 36rpx; text-align: right; }

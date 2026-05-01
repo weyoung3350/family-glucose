@@ -1,0 +1,38 @@
+<view class="page family-page" wx:if="{{family}}">
+  <view class="card family-name">
+    <view>
+      <view class="label">家庭名</view>
+      <view class="name">{{family.name}}</view>
+    </view>
+    <view wx:if="{{isCreator}}" class="edit" bindtap="editName">编辑</view>
+  </view>
+
+  <view wx:if="{{isCreator}}" class="card invite">
+    <view class="label">邀请码 · 家人输入即可加入（永久有效，可随时分享）</view>
+    <view class="code">{{family.invite_code}}</view>
+    <view class="invite-actions">
+      <view class="btn-ghost" bindtap="copyCode">复制</view>
+      <button class="share-btn" open-type="share">分享到微信</button>
+    </view>
+  </view>
+  <view wx:else class="card role-card">
+    <view class="label">我的角色</view>
+    <view class="name">成员 · 可记录、可查看，不可管理</view>
+  </view>
+
+  <view class="card">
+    <view class="section-title">家庭成员（{{members.length}}）</view>
+    <view class="member" wx:for="{{members}}" wx:key="id">
+      <view class="avatar">{{item.avatarText}}</view>
+      <view class="member-main">
+        <view>{{item.nickname || '家人'}} <text class="role">{{item.roleText}}</text></view>
+        <view class="joined">{{item.joinedText}}</view>
+      </view>
+      <view wx:if="{{isCreator && !item.is_me}}" data-id="{{item.id}}" bindtap="removeMember" class="remove">移除</view>
+    </view>
+  </view>
+
+  <view wx:if="{{isCreator}}" class="danger-btn" bindtap="dissolveFamily">解散家庭</view>
+  <view wx:else class="danger-btn" bindtap="leaveFamily">退出家庭</view>
+  <view wx:if="{{!isCreator}}" class="tip">如需邀请新家人，请联系管理员</view>
+</view>

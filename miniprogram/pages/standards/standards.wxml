@@ -1,0 +1,20 @@
+<view class="page standards-page">
+  <view wx:if="{{isCreator}}" class="hint-card">管理员 你可以编辑下方阈值，全家成员同步生效</view>
+  <view class="card">
+    <view class="group-title">空腹理想区间</view>
+    <view class="line" data-key="fasting_low" bindtap="editValue"><text>下限</text><text>{{standards.fasting_low}}</text></view>
+    <view class="line" data-key="fasting_high" bindtap="editValue"><text>上限</text><text>{{standards.fasting_high}}</text></view>
+  </view>
+  <view class="card">
+    <view class="group-title">餐后理想区间</view>
+    <view class="line" data-key="postprandial_low" bindtap="editValue"><text>下限</text><text>{{standards.postprandial_low}}</text></view>
+    <view class="line" data-key="postprandial_high" bindtap="editValue"><text>上限</text><text>{{standards.postprandial_high}}</text></view>
+  </view>
+  <view class="card">
+    <view class="group-title">警戒值</view>
+    <view class="line low" data-key="critical_low" bindtap="editValue"><text>偏低警戒值</text><text>{{standards.critical_low}}</text></view>
+    <view class="line high" data-key="critical_high" bindtap="editValue"><text>过高警戒值</text><text>{{standards.critical_high}}</text></view>
+  </view>
+  <view class="desc">默认值依据中国 2 型糖尿病防治指南，请遵医嘱调整。单位 mmol/L。</view>
+  <view wx:if="{{isCreator}}" class="btn-primary save" bindtap="onSave">保存</view>
+</view>

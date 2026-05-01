@@ -1,0 +1,68 @@
+<view class="page add-page">
+  <view class="segment">
+    <view class="{{mode === 'manual' ? 'active' : ''}}" data-mode="manual" bindtap="switchMode">手动录入</view>
+    <view class="{{mode === 'ai' ? 'active' : ''}}" data-mode="ai" bindtap="switchMode">AI 一句话</view>
+  </view>
+
+  <!-- ============ 手动录入 ============ -->
+  <block wx:if="{{mode === 'manual'}}">
+    <view class="card value-card">
+      <view class="field-label">血糖值</view>
+      <view class="value-row">
+        <input class="value-input" type="digit" value="{{value}}" bindinput="onValueInput" placeholder="0.0" placeholder-class="value-placeholder" />
+        <text class="unit">mmol/L</text>
+      </view>
+    </view>
+    <view class="card">
+      <view class="field-label">时段</view>
+      <period-picker value="{{period}}" bind:change="onPeriodChange" />
+    </view>
+    <view class="card">
+      <view class="field-label">测量时间 <text class="field-hint">（5 分钟刻度）</text></view>
+      <picker mode="multiSelector" range="{{timeRange}}" value="{{timeValue}}" bindchange="onTimeChange">
+        <view class="picker-line">{{timeText}} ›</view>
+      </picker>
+    </view>
+    <view class="card">
+      <view class="field-label">备注</view>
+      <input class="note-input" maxlength="200" value="{{note}}" bindinput="onNoteInput" placeholder="例如：吃了二甲双胍 0.5g" />
+    </view>
+    <view class="save-bar">
+      <view class="btn-primary" bindtap="onSave">保存</view>
+    </view>
+  </block>
+
+  <!-- ============ AI 一句话 ============ -->
+  <block wx:if="{{mode === 'ai'}}">
+    <view class="card input-card">
+      <textarea value="{{text}}" bindinput="onTextInput" placeholder="试试说：早上 9:20 空腹血糖 11.1，吃了二甲双胍" auto-focus maxlength="200" />
+      <view class="input-actions">
+        <text class="hint">语音功能开发中，请文字输入</text>
+        <text class="clear" bindtap="onClear">清空</text>
+      </view>
+      <view class="btn-primary recognize-btn {{(text && !parsing) ? '' : 'disabled'}}" bindtap="onRecognize">{{parsing ? '识别中…' : '点击识别'}}</view>
+      <view wx:if="{{error}}" class="error">{{error}}</view>
+    </view>
+
+    <view wx:if="{{missingText}}" class="missing">{{missingText}}</view>
+
+    <view wx:if="{{parsed}}" class="card result-card">
+      <view class="card-title">已识别（点字段可改）</view>
+      <view class="result-row" bindtap="onValueEdit"><text>血糖值</text><text class="value">{{parsed.value || '--'}} mmol/L ›</text></view>
+      <view class="period-edit">
+        <view class="result-row {{parsed.period_inferred ? 'inferred' : ''}}"><text>时段</text><text>{{parsed.periodLabel || '请选择'}} <text wx:if="{{parsed.period_inferred}}" class="infer-badge">AI 推断</text>›</text></view>
+        <period-picker value="{{parsed.period}}" bind:change="onAiPeriodChange" />
+      </view>
+      <view class="result-row {{parsed.measured_at_inferred ? 'inferred' : ''}}" bindtap="onTimeEdit">
+        <text>测量时间</text>
+        <text>{{parsed.timeText}} <text wx:if="{{parsed.measured_at_inferred}}" class="infer-badge">AI 推断</text>›</text>
+      </view>
+      <view class="result-row" bindtap="onNoteEdit"><text>备注</text><text>{{parsed.note || '无'}} ›</text></view>
+    </view>
+
+    <view class="bottom-actions">
+      <view class="btn-ghost" bindtap="onClear">重新输入</view>
+      <view class="btn-primary {{canSave ? '' : 'disabled'}}" bindtap="onAiSave">确认保存</view>
+    </view>
+  </block>
+</view>

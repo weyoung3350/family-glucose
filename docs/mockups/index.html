@@ -1,0 +1,1479 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>家有糖人 · 界面原型 v0.3</title>
+<style>
+  :root {
+    --primary: #FF9F40;
+    --primary-deep: #F08A2C;
+    --bg: #F5F5F5;
+    --card: #FFFFFF;
+    --text: #1F2329;
+    --text-2: #4E5969;
+    --text-3: #86909C;
+    --line: #E5E6EB;
+    --c-low: #4DA3FF;
+    --c-ideal: #52C41A;
+    --c-ok: #FAAD14;
+    --c-high: #FA8C16;
+    --c-vhigh: #F5222D;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: #ECEEF2;
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+  }
+  .doc {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+  .doc h1 {
+    font-size: 28px;
+    margin: 0 0 8px;
+    font-weight: 700;
+  }
+  .doc p.lead {
+    margin: 0 0 12px;
+    color: var(--text-2);
+    font-size: 15px;
+    line-height: 1.6;
+  }
+  .legend {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding: 12px 16px;
+    background: white;
+    border-radius: 12px;
+    margin: 16px 0 28px;
+    font-size: 13px;
+  }
+  .legend .lg-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .legend .dot {
+    width: 14px; height: 14px; border-radius: 50%;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px 28px;
+  }
+  @media (max-width: 1100px) {
+    .grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 760px) {
+    .grid { grid-template-columns: 1fr; }
+  }
+  .stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .stage .stage-title {
+    font-size: 14px;
+    color: var(--text-2);
+    margin-bottom: 10px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+  .stage .stage-sub {
+    font-size: 12px;
+    color: var(--text-3);
+    margin-bottom: 14px;
+  }
+  /* phone frame */
+  .phone {
+    width: 320px;
+    height: 660px;
+    background: var(--bg);
+    border-radius: 32px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.12), 0 0 0 8px #1f1f24;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+  .status-bar {
+    height: 28px;
+    background: var(--bg);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 18px;
+    font-size: 11px;
+    color: var(--text);
+    font-weight: 600;
+  }
+  .status-bar .right { display: inline-flex; gap: 4px; align-items: center; }
+  .nav {
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background: var(--bg);
+    font-size: 16px;
+    font-weight: 600;
+  }
+  .nav .back {
+    position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+    width: 24px; height: 24px;
+    color: var(--text);
+  }
+  .nav .more {
+    position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+    color: var(--text-2);
+    font-size: 18px;
+  }
+  .content {
+    flex: 1;
+    overflow: hidden;
+    padding: 0 14px 70px;
+  }
+  .tabbar {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 56px;
+    background: white;
+    border-top: 1px solid var(--line);
+    display: flex;
+  }
+  .tabbar .tb {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    color: var(--text-3);
+    gap: 2px;
+  }
+  .tabbar .tb.active { color: var(--primary); }
+  .tabbar .tb svg { width: 22px; height: 22px; }
+  /* common cards */
+  .card {
+    background: white;
+    border-radius: 14px;
+    padding: 14px;
+    margin-bottom: 10px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+  }
+  /* glucose record card on home */
+  .rec {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 12px;
+    align-items: center;
+    padding: 14px;
+    background: white;
+    border-radius: 14px;
+    margin-bottom: 10px;
+  }
+  .rec .val {
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 1;
+    min-width: 64px;
+  }
+  .rec .val small {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-3);
+    margin-left: 2px;
+  }
+  .rec .mid {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+  }
+  .rec .tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 8px;
+    background: #FFF1E0;
+    color: var(--primary-deep);
+    font-size: 11px;
+    width: fit-content;
+  }
+  .rec .meta {
+    font-size: 11px;
+    color: var(--text-3);
+  }
+  .rec .recorder {
+    display: flex; align-items: center; gap: 4px;
+    font-size: 11px;
+    color: var(--text-2);
+  }
+  .rec .avatar {
+    width: 18px; height: 18px; border-radius: 50%;
+    background: #FFE7CC; color: var(--primary-deep);
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 600;
+  }
+  .rec .right-side {
+    display: flex; flex-direction: column; align-items: flex-end; gap: 4px;
+  }
+  .rec .time {
+    font-size: 11px;
+    color: var(--text-3);
+  }
+  .rec .stat-pill {
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 8px;
+    color: white;
+  }
+  .val.low { color: var(--c-low); }
+  .val.ideal { color: var(--c-ideal); }
+  .val.ok { color: var(--c-ok); }
+  .val.high { color: var(--c-high); }
+  .val.vhigh { color: var(--c-vhigh); }
+  .pill.low { background: var(--c-low); }
+  .pill.ideal { background: var(--c-ideal); }
+  .pill.ok { background: var(--c-ok); }
+  .pill.high { background: var(--c-high); }
+  .pill.vhigh { background: var(--c-vhigh); }
+  /* fab */
+  .fab {
+    position: absolute;
+    left: 16px; right: 16px; bottom: 70px;
+    height: 52px;
+    background: var(--primary);
+    color: white;
+    border-radius: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 17px;
+    font-weight: 600;
+    box-shadow: 0 6px 18px rgba(255,159,64,0.4);
+    gap: 4px;
+  }
+  /* fab combo with mic */
+  .fab-row {
+    position: absolute;
+    left: 16px; right: 16px; bottom: 70px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  .fab-main {
+    flex: 1;
+    height: 52px;
+    background: var(--primary);
+    color: white;
+    border-radius: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 17px;
+    font-weight: 600;
+    box-shadow: 0 6px 18px rgba(255,159,64,0.4);
+    gap: 4px;
+  }
+  .fab-mic {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: white;
+    border: 2px solid var(--primary);
+    color: var(--primary);
+    font-size: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 18px rgba(255,159,64,0.25);
+  }
+  /* hero */
+  .hero {
+    padding: 18px 4px 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+  .hero h2 {
+    font-size: 22px;
+    margin: 0 0 2px;
+    font-weight: 700;
+  }
+  .hero .sub {
+    font-size: 12px;
+    color: var(--text-2);
+  }
+  .hero .stat {
+    text-align: right;
+  }
+  .hero .stat .num {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--primary);
+  }
+  .hero .stat .lbl {
+    font-size: 11px;
+    color: var(--text-3);
+  }
+  /* date divider */
+  .day {
+    font-size: 12px;
+    color: var(--text-3);
+    margin: 12px 4px 6px;
+  }
+  /* form fields */
+  .field { margin-bottom: 12px; }
+  .field-label {
+    font-size: 13px;
+    color: var(--text-2);
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+  .input-big {
+    background: white;
+    border-radius: 14px;
+    padding: 18px 14px;
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--primary);
+    text-align: center;
+    border: 2px solid var(--primary);
+  }
+  .input-big small {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-3);
+    margin-left: 4px;
+  }
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .chip {
+    padding: 9px 14px;
+    background: white;
+    border-radius: 18px;
+    font-size: 13px;
+    color: var(--text-2);
+    border: 1px solid var(--line);
+  }
+  .chip.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+  }
+  .input-row {
+    background: white;
+    border-radius: 12px;
+    padding: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+  }
+  .input-row .ph { color: var(--text-3); }
+  .btn-primary {
+    width: 100%;
+    height: 50px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-size: 17px;
+    font-weight: 600;
+    box-shadow: 0 6px 18px rgba(255,159,64,0.35);
+    text-align: center;
+  }
+  .btn-ghost {
+    width: 100%;
+    height: 46px;
+    background: white;
+    color: var(--text);
+    border: 1px solid var(--line);
+    border-radius: 23px;
+    font-size: 15px;
+    text-align: center;
+  }
+  button { text-align: center; }
+  /* matrix */
+  .matrix {
+    background: white;
+    border-radius: 14px;
+    padding: 8px 6px;
+    overflow: hidden;
+    font-size: 11px;
+  }
+  .matrix table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  .matrix th, .matrix td {
+    text-align: center;
+    padding: 6px 2px;
+    font-weight: 500;
+  }
+  .matrix th {
+    color: var(--text-3);
+    font-size: 10px;
+  }
+  .matrix td.date {
+    color: var(--text-2);
+    font-size: 11px;
+    font-weight: 600;
+    text-align: left;
+    padding-left: 4px;
+  }
+  .cell {
+    border-radius: 6px;
+    padding: 4px 0;
+    color: white;
+    font-weight: 600;
+    font-size: 11px;
+    min-width: 26px;
+    display: inline-block;
+  }
+  .cell.empty { background: #F2F3F5; color: var(--text-3); font-weight: 400; }
+  .cell.low { background: var(--c-low); }
+  .cell.ideal { background: var(--c-ideal); }
+  .cell.ok { background: var(--c-ok); }
+  .cell.high { background: var(--c-high); }
+  .cell.vhigh { background: var(--c-vhigh); }
+  /* trend chart svg holder */
+  .chart-card {
+    background: white;
+    border-radius: 14px;
+    padding: 14px 10px 10px;
+  }
+  .chart-card h3 {
+    font-size: 14px;
+    margin: 0 0 8px 4px;
+    color: var(--text);
+  }
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    margin-top: 10px;
+  }
+  .stat-card {
+    background: white;
+    border-radius: 12px;
+    padding: 12px;
+  }
+  .stat-card .lbl { font-size: 12px; color: var(--text-3); }
+  .stat-card .num { font-size: 22px; font-weight: 700; color: var(--text); margin-top: 2px; }
+  .stat-card .sub { font-size: 11px; color: var(--text-3); }
+  /* report */
+  .big-report {
+    background: linear-gradient(135deg, #FFB066 0%, #FF9F40 100%);
+    color: white;
+    border-radius: 16px;
+    padding: 16px 14px;
+    margin-bottom: 12px;
+  }
+  .big-report .title { font-size: 12px; opacity: 0.9; }
+  .big-report .num { font-size: 36px; font-weight: 700; line-height: 1.1; }
+  .big-report .sub { font-size: 11px; opacity: 0.9; margin-top: 2px; }
+  .dist-row {
+    display: flex; gap: 4px; height: 36px; border-radius: 6px; overflow: hidden;
+    margin-top: 6px;
+  }
+  .dist-row .seg {
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-size: 11px; font-weight: 600;
+  }
+  /* segmented top */
+  .seg-top {
+    display: flex;
+    background: #EAEDF2;
+    border-radius: 10px;
+    padding: 3px;
+    margin: 8px 0 14px;
+  }
+  .seg-top .s {
+    flex: 1;
+    padding: 7px 0;
+    text-align: center;
+    font-size: 13px;
+    color: var(--text-2);
+    border-radius: 8px;
+  }
+  .seg-top .s.active {
+    background: white;
+    color: var(--text);
+    font-weight: 600;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+  }
+  /* 我的 list */
+  .me-card {
+    background: linear-gradient(135deg, #FFB066, #FF9F40);
+    color: white;
+    border-radius: 14px;
+    padding: 16px 14px;
+    margin-top: 6px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .me-card .ava {
+    width: 48px; height: 48px; border-radius: 50%;
+    background: rgba(255,255,255,0.25);
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 18px; font-weight: 700;
+  }
+  .me-card .nick { font-size: 17px; font-weight: 600; }
+  .me-card .fam { font-size: 12px; opacity: 0.9; }
+  .menu {
+    background: white;
+    border-radius: 14px;
+    overflow: hidden;
+  }
+  .menu-item {
+    display: flex; align-items: center; padding: 14px 12px;
+    font-size: 15px;
+    border-bottom: 1px solid var(--line);
+  }
+  .menu-item:last-child { border-bottom: none; }
+  .menu-item .icon {
+    width: 28px; height: 28px; border-radius: 8px;
+    background: #FFF1E0; color: var(--primary-deep);
+    display: inline-flex; align-items: center; justify-content: center;
+    margin-right: 10px; font-size: 14px;
+  }
+  .menu-item .arrow { margin-left: auto; color: var(--text-3); }
+  /* invite code */
+  .invite-box {
+    background: white;
+    border-radius: 14px;
+    padding: 16px 14px;
+    margin-bottom: 12px;
+  }
+  .invite-box .lbl {
+    font-size: 12px; color: var(--text-3);
+  }
+  .invite-box .code {
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: 6px;
+    color: var(--primary);
+    margin: 6px 0 10px;
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+  }
+  .invite-actions { display: grid; grid-template-columns: 1fr 1.4fr; gap: 8px; }
+  .invite-actions button {
+    height: 38px; border-radius: 19px; border: 1px solid var(--line);
+    background: white; color: var(--text); font-size: 13px; padding: 0;
+    width: 100%;
+  }
+  .member {
+    display: flex; align-items: center; padding: 12px 12px; border-bottom: 1px solid var(--line);
+    gap: 8px;
+  }
+  .member:last-child { border-bottom: none; }
+  .member .ava {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: #FFE7CC; color: var(--primary-deep);
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 600;
+    flex-shrink: 0;
+  }
+  .member .name { font-size: 14px; flex: 1; min-width: 0; }
+  .member .role {
+    font-size: 10px;
+    color: var(--primary-deep);
+    background: #FFF1E0;
+    padding: 2px 6px;
+    border-radius: 6px;
+    flex-shrink: 0;
+  }
+  .member .joined { font-size: 11px; color: var(--text-3); flex-shrink: 0; }
+  /* join family */
+  .join-hero {
+    text-align: center;
+    padding: 28px 0 18px;
+  }
+  .join-hero .icon {
+    width: 64px; height: 64px; border-radius: 18px;
+    background: linear-gradient(135deg, #FFB066, #FF9F40);
+    color: white; font-size: 32px; font-weight: 700;
+    display: inline-flex; align-items: center; justify-content: center;
+    margin-bottom: 12px;
+  }
+  .join-hero h1 { font-size: 22px; margin: 4px 0; }
+  .join-hero p { font-size: 13px; color: var(--text-2); margin: 0; }
+  .code-input {
+    background: white;
+    border-radius: 14px;
+    padding: 16px;
+    text-align: center;
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 28px;
+    letter-spacing: 8px;
+    color: var(--text);
+    border: 2px dashed var(--primary);
+    margin: 16px 0;
+  }
+  /* settings rows */
+  .set-row {
+    background: white;
+    padding: 14px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid var(--line);
+  }
+  .set-rows-wrap {
+    background: white;
+    border-radius: 14px;
+    overflow: hidden;
+    margin-bottom: 12px;
+  }
+  .set-row:last-child { border-bottom: none; }
+  .set-row .l { font-size: 14px; color: var(--text); }
+  .set-row .v {
+    margin-left: auto;
+    font-size: 14px;
+    color: var(--primary);
+    font-weight: 600;
+  }
+  .set-tip {
+    font-size: 11px;
+    color: var(--text-3);
+    padding: 6px 4px 12px;
+  }
+  /* about */
+  .about-logo {
+    width: 80px; height: 80px;
+    border-radius: 22px;
+    margin: 32px auto 14px;
+    background: linear-gradient(135deg, #FFB066, #FF9F40);
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-size: 38px; font-weight: 800;
+  }
+  .about-name {
+    text-align: center;
+    font-size: 17px;
+    font-weight: 600;
+  }
+  .about-ver {
+    text-align: center;
+    font-size: 12px;
+    color: var(--text-3);
+    margin-bottom: 24px;
+  }
+  /* detail page */
+  .detail-hero {
+    background: white;
+    border-radius: 14px;
+    padding: 18px;
+    text-align: center;
+    margin-bottom: 12px;
+  }
+  .detail-hero .big {
+    font-size: 56px;
+    font-weight: 700;
+    line-height: 1;
+  }
+  .detail-hero .big small { font-size: 16px; font-weight: 500; color: var(--text-3); margin-left: 4px; }
+  .detail-hero .stt {
+    display: inline-block;
+    margin-top: 6px;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 14px;
+    font-size: 12px;
+  }
+  .detail-meta { background: white; border-radius: 14px; padding: 6px 14px; }
+  .detail-meta .row {
+    display: flex; padding: 12px 0; border-bottom: 1px solid var(--line); font-size: 14px;
+  }
+  .detail-meta .row:last-child { border-bottom: none; }
+  .detail-meta .row .k { width: 80px; color: var(--text-3); }
+  .detail-meta .row .v { color: var(--text); flex: 1; }
+  /* footnote */
+  .foot {
+    margin-top: 50px;
+    text-align: center;
+    color: var(--text-3);
+    font-size: 13px;
+  }
+  /* export */
+  .range-btn {
+    flex: 1; padding: 12px 0; text-align: center;
+    background: white; border: 1px solid var(--line); border-radius: 12px;
+    font-size: 13px; color: var(--text-2);
+  }
+  .range-btn.active { border-color: var(--primary); color: var(--primary); background: #FFF8F0; }
+</style>
+</head>
+<body>
+<div class="doc">
+  <h1>家有糖人 · 界面原型 v0.3</h1>
+  <p class="lead">基于 PRD 输出的 14 个核心页面高保真原型，中老年友好风格。颜色分级按"偏低 / 理想 / 一般 / 偏高 / 过高"五档；家庭管理区分管理员/成员两个视图；首版即支持文字与语音的「一句话快记」AI 录入；测量时间按 5 分钟刻度。</p>
+  <div class="legend">
+    <span class="lg-item"><span class="dot" style="background:var(--c-low)"></span>偏低 &lt; 3.9</span>
+    <span class="lg-item"><span class="dot" style="background:var(--c-ideal)"></span>理想（空腹 4.4-6.1 / 餐后 4.4-7.8）</span>
+    <span class="lg-item"><span class="dot" style="background:var(--c-ok)"></span>一般</span>
+    <span class="lg-item"><span class="dot" style="background:var(--c-high)"></span>偏高</span>
+    <span class="lg-item"><span class="dot" style="background:var(--c-vhigh)"></span>过高 ≥ 13.9</span>
+  </div>
+
+  <div class="grid">
+
+    <!-- =================== P01 首页 =================== -->
+    <div class="stage">
+      <div class="stage-title">P01 · 首页</div>
+      <div class="stage-sub">血糖记录流 + 快速新增</div>
+      <div class="phone">
+        <div class="status-bar">
+          <span>9:41</span>
+          <span class="right">●●● ▮</span>
+        </div>
+        <div class="nav">咱家的血糖记录</div>
+        <div class="content">
+          <div class="hero">
+            <div>
+              <h2>今天</h2>
+              <div class="sub">4 月 29 日 · 周三</div>
+            </div>
+            <div class="stat">
+              <div class="num">2</div>
+              <div class="lbl">今日已测</div>
+            </div>
+          </div>
+
+          <div class="day">今天</div>
+          <div class="rec">
+            <div class="val ok">8.2<small>mmol/L</small></div>
+            <div class="mid">
+              <span class="tag">早餐后</span>
+              <span class="recorder"><span class="avatar">妈</span>妈妈记 · 备注：吃了二甲双胍</span>
+            </div>
+            <div class="right-side">
+              <span class="time">09:45</span>
+              <span class="stat-pill pill ok">一般</span>
+            </div>
+          </div>
+          <div class="rec">
+            <div class="val ideal">5.8<small>mmol/L</small></div>
+            <div class="mid">
+              <span class="tag">空腹</span>
+              <span class="recorder"><span class="avatar">妈</span>妈妈记</span>
+            </div>
+            <div class="right-side">
+              <span class="time">07:30</span>
+              <span class="stat-pill pill ideal">理想</span>
+            </div>
+          </div>
+
+          <div class="day">昨天</div>
+          <div class="rec">
+            <div class="val ok">9.1<small>mmol/L</small></div>
+            <div class="mid">
+              <span class="tag">晚餐后</span>
+              <span class="recorder"><span class="avatar">女</span>女儿记</span>
+            </div>
+            <div class="right-side">
+              <span class="time">19:50</span>
+              <span class="stat-pill pill ok">一般</span>
+            </div>
+          </div>
+          <div class="rec">
+            <div class="val ok">6.5<small>mmol/L</small></div>
+            <div class="mid">
+              <span class="tag">空腹</span>
+              <span class="recorder"><span class="avatar">女</span>女儿记</span>
+            </div>
+            <div class="right-side">
+              <span class="time">07:35</span>
+              <span class="stat-pill pill ok">一般</span>
+            </div>
+          </div>
+
+        </div>
+        <div class="fab-row">
+          <div class="fab-main">＋ 记一次血糖</div>
+          <div class="fab-mic" title="一句话快记"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg></div>
+        </div>
+        <div class="tabbar">
+          <div class="tb active">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 11l9-8 9 8v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg>
+            <span>首页</span>
+          </div>
+          <div class="tb">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg>
+            <span>分析</span>
+          </div>
+          <div class="tb">
+            <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
+            <span>我的</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =================== P02 新增（手动） =================== -->
+    <div class="stage">
+      <div class="stage-title">P02 · 新增血糖记录（手动）</div>
+      <div class="stage-sub">单页一屏录入 · 时间 5 分钟刻度</div>
+      <div class="phone">
+        <div class="status-bar"><span>9:41</span><span class="right">●●● ▮</span></div>
+        <div class="nav">
+          <span class="back">←</span>
+          记一次血糖
+        </div>
+        <div class="content">
+          <div class="seg-top">
+            <div class="s active">手动录入</div>
+            <div class="s">AI 一句话</div>
+          </div>
+          <div class="field">
+            <div class="field-label">血糖值</div>
+            <div class="input-big">7.2<small>mmol/L</small></div>
+          </div>
+          <div class="field">
+            <div class="field-label">时段</div>
+            <div class="chips">
+              <span class="chip">空腹</span>
+              <span class="chip">早餐前</span>
+              <span class="chip active">早餐后</span>
+              <span class="chip">午餐前</span>
+              <span class="chip">午餐后</span>
+              <span class="chip">晚餐前</span>
+              <span class="chip">晚餐后</span>
+              <span class="chip">睡前</span>
+            </div>
+          </div>
+          <div class="field">
+            <div class="field-label">测量时间 <span style="color:var(--text-3);font-size:11px;font-weight:400">（5 分钟刻度）</span></div>
+            <div class="input-row">
+              <span>2026-04-29 &nbsp; 09:45</span>
+              <span style="color: var(--text-3)">›</span>
+            </div>
+          </div>
+          <div class="field">
+            <div class="field-label">备注（选填）</div>
+            <div class="input-row">
+              <span class="ph">例：吃了二甲双胍 0.5g</span>
+            </div>
+          </div>
+        </div>
+        <div class="fab" style="background: var(--primary)">保存</div>
+      </div>
+    </div>
+
+    <!-- =================== P02b AI 一句话录入 =================== -->
+    <div class="stage">
+      <div class="stage-title">P02b · 一句话快记（AI 模式）</div>
+      <div class="stage-sub">语音/文字 → 自动识别 → 确认</div>
+      <div class="phone">
+        <div class="status-bar"><span>9:41</span><span class="right">●●● ▮</span></div>
+        <div class="nav">
+          <span class="back">←</span>
+          记一次血糖
+        </div>
+        <div class="content">
+          <div class="seg-top">
+            <div class="s">手动录入</div>
+            <div class="s active">AI 一句话</div>
+          </div>
+
+          <div style="background:white;border-radius:14px;padding:14px;margin-bottom:10px">
+            <div style="font-size:13px;color:var(--text-2);margin-bottom:8px">说一句话或写一句话，自动识别字段</div>
+            <div style="background:#F7F8FA;border-radius:10px;padding:12px;font-size:14px;color:var(--text);min-height:54px;line-height:1.5">
+              早上 9:20 空腹血糖 11.1，吃了二甲双胍
+            </div>
+            <div style="display:flex;gap:8px;align-items:center;margin-top:10px">
+              <div style="width:44px;height:44px;border-radius:50%;background:#FF9F40;color:white;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(255,159,64,0.4)"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg></div>
+              <div style="font-size:11px;color:var(--text-3);flex:1">长按说话，松开识别</div>
+              <button style="background:white;border:1px solid var(--line);border-radius:14px;padding:5px 10px;font-size:12px;color:var(--text-2)">✕ 清空</button>
+            </div>
+          </div>
+
+          <div style="font-size:12px;color:var(--text-3);padding:0 4px 6px;display:flex;align-items:center;gap:6px">
+            <span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--c-ideal)"></span>
+            已识别（点字段可改）
+          </div>
+          <div class="card" style="padding:0">
+            <div style="display:flex;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--line);align-items:center">
+              <span style="font-size:13px;color:var(--text-3)">血糖值</span>
+              <span style="font-size:18px;font-weight:700;color:var(--c-high)">11.1<span style="font-size:11px;color:var(--text-3);font-weight:400;margin-left:2px">mmol/L</span> ›</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--line);align-items:center">
+              <span style="font-size:13px;color:var(--text-3)">时段</span>
+              <span style="font-size:14px;color:var(--text)">空腹 ›</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--line);align-items:center">
+              <span style="font-size:13px;color:var(--text-3)">测量时间</span>
+              <span style="font-size:14px;color:var(--text)">今天 09:20 ›</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;padding:12px 14px;align-items:center">
+              <span style="font-size:13px;color:var(--text-3)">备注</span>
+              <span style="font-size:14px;color:var(--text);max-width:60%;text-align:right">吃了二甲双胍 ›</span>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:8px;margin-top:12px">
+            <button class="btn-ghost" style="flex:1">重新输入</button>
+            <button class="btn-primary" style="flex:1.4">✓ 确认保存</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =================== P03 详情 =================== -->
+    <div class="stage">
+      <div class="stage-title">P03 · 记录详情</div>
+      <div class="stage-sub">只读视图 · 仅记录人可改</div>
+      <div class="phone">
+        <div class="status-bar"><span>9:41</span><span class="right">●●● ▮</span></div>
+        <div class="nav">
+          <span class="back">←</span>
+          记录详情
+          <span class="more">⋯</span>
+        </div>
+        <div class="content">
+          <div class="detail-hero">
+            <div class="big" style="color: var(--c-ok)">8.2<small>mmol/L</small></div>
+            <span class="stt pill ok">一般</span>
+            <div style="font-size:12px;color:var(--text-3);margin-top:6px">理想范围（餐后）4.4 ~ 7.8</div>
+          </div>
+          <div class="detail-meta">
+            <div class="row"><span class="k">时段</span><span class="v">早餐后</span></div>
+            <div class="row"><span class="k">测量时间</span><span class="v">2026-04-29 09:45</span></div>
+            <div class="row"><span class="k">记录人</span><span class="v"><span class="avatar" style="display:inline-flex;width:18px;height:18px;font-size:10px;background:#FFE7CC;color:var(--primary-deep);border-radius:50%;align-items:center;justify-content:center;margin-right:4px">妈</span>妈妈</span></div>
+            <div class="row"><span class="k">记录时间</span><span class="v">2026-04-29 09:46</span></div>
+            <div class="row"><span class="k">备注</span><span class="v">吃了二甲双胍 0.5g</span></div>
+          </div>
+          <div style="margin-top:16px;display:flex;gap:8px">
+            <button class="btn-ghost" style="height:42px">编辑</button>
+            <button class="btn-ghost" style="height:42px;color:var(--c-vhigh);border-color:#FFCDD2">删除</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =================== P04 按天矩阵 =================== -->
+    <div class="stage">
+      <div class="stage-title">P04 · 分析-按天矩阵</div>
+      <div class="stage-sub">日期 × 时段 二维表</div>
+      <div class="phone">
+        <div class="status-bar"><span>9:41</span><span class="right">●●● ▮</span></div>
+        <div class="nav">分析</div>
+        <div class="content">
+          <div class="seg-top">
+            <div class="s active">按天矩阵</div>
+            <div class="s">趋势图</div>
+            <div class="s">报表</div>
+          </div>
+          <div class="input-row" style="margin-bottom:10px">
+            <span>最近 7 天</span>
+            <span style="color: var(--text-3)">›</span>
+          </div>
+          <div class="matrix">
+            <table>
+              <thead>
+                <tr>
+                  <th></th><th>空腹</th><th>早后</th><th>午前</th><th>午后</th><th>晚前</th><th>晚后</th><th>睡前</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="date">4-29</td>
+                  <td><span class="cell ideal">5.8</span></td>
+                  <td><span class="cell ok">8.2</span></td>
+                  <td><span class="cell empty">-</span></td>
+                  <td><span class="cell empty">-</span></td>
+                  <td><span class="cell empty">-</span></td>
+                  <td><span class="cell empty">-</span></td>
+                  <td><span class="cell empty">-</span></td>
+                </tr>
+                <tr>
+                  <td class="date">4-28</td>
+                  <td><span class="cell ok">6.5</span></td>
+                  <td><span class="cell ok">8.6</span></td>
+                  <td><span class="cell empty">-</span></td>
+                  <td><span class="cell ok">9.0</span></td>
+                  <td><span class="cell empty">-</span></td>
+                  <td><span class="cell ok">9.1</span></td>
+                  <td><span class="cell empty">-</span></td>
+                </tr>
+                <tr>
+                  <td class="date">4-27</td>
+                  <td><span class="cell ideal">5.5</span></td>
+                  <td><span class="cell empty">-</span></td>
+                  <td><span class="cell empty">-</span></td>
+                  <td><span class="cell high">11.2</span></td>
+                  <td><span class="cell empty">-</span></td>
+                  <td><span class="cell ok">9.3</span></td>
+                  <td><span class="cell empty">-</span></td>
+                </tr>
+                <tr>
+                  <td class="date">4-26</td>
+                  <td><span class="cell ok">6.4</span></td>
+                  <td><span class="cell ok">7.9</span></td>
+                  <td><span class="cell empty">-</span></td>
+                  <td><span class="cell ok">8.4</span></td>
+                  <td><span class="cell empty">-</span></td>
+                  <td><span class="cell empty">-</span></td>
+                  <td><span class="cell ok">7.5</span></td>
+                </tr>
+                <tr>
+                  <td class="date">4-25</td>
+                  <td><span class="cell ideal">5.9</span></td>
+                  <td><span class="cell empty">-</span></td>
+                  <td><span class="cell empty">-</span></td>
+                  <td><span class="cell vhigh">14.1</span></td>
+                  <td><span class="cell empty">-</span></td>
+                  <td><span class="cell high">12.2</span></td>
+                  <td><span class="cell empty">-</span></td>
+                </tr>
+                <tr>
+                  <td class="date">4-24</td>
+                  <td><span class="cell ok">6.3</span></td>
+                  <td><span class="cell ok">8.7</span></td>
+                  <td><span class="cell empty">-</span></td>
+                  <td><span class="cell ok">9.4</span></td>
+                  <td><span class="cell empty">-</span></td>
+                  <td><span class="cell empty">-</span></td>
+                  <td><span class="cell empty">-</span></td>
+                </tr>
+                <tr>
+                  <td class="date">4-23</td>
+                  <td><span class="cell low">3.6</span></td>
+                  <td><span class="cell ideal">7.2</span></td>
+                  <td><span class="cell empty">-</span></td>
+                  <td><span class="cell ok">8.9</span></td>
+                  <td><span class="cell empty">-</span></td>
+                  <td><span class="cell empty">-</span></td>
+                  <td><span class="cell empty">-</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div style="font-size:11px;color:var(--text-3);padding:8px 4px">点单元格可看记录详情</div>
+        </div>
+        <div class="tabbar">
+          <div class="tb"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 11l9-8 9 8v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg><span>首页</span></div>
+          <div class="tb active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg><span>分析</span></div>
+          <div class="tb"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span>我的</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =================== P05 趋势图 =================== -->
+    <div class="stage">
+      <div class="stage-title">P05 · 分析-趋势图</div>
+      <div class="stage-sub">折线图 + 统计卡片</div>
+      <div class="phone">
+        <div class="status-bar"><span>9:41</span><span class="right">●●● ▮</span></div>
+        <div class="nav">分析</div>
+        <div class="content">
+          <div class="seg-top">
+            <div class="s">按天矩阵</div>
+            <div class="s active">趋势图</div>
+            <div class="s">报表</div>
+          </div>
+          <div class="chips" style="margin-bottom:10px">
+            <span class="chip active">全部时段</span>
+            <span class="chip">空腹</span>
+            <span class="chip">餐后</span>
+          </div>
+          <div class="input-row" style="margin-bottom:10px">
+            <span>最近 30 天</span>
+            <span style="color: var(--text-3)">›</span>
+          </div>
+          <div class="chart-card">
+            <h3>血糖趋势 (mmol/L)</h3>
+            <svg viewBox="0 0 280 140" width="100%" height="140">
+              <!-- ideal range shaded -->
+              <rect x="22" y="50" width="260" height="38" fill="#52C41A" opacity="0.1"/>
+              <line x1="22" y1="50" x2="282" y2="50" stroke="#52C41A" stroke-dasharray="2 3" stroke-width="0.6"/>
+              <line x1="22" y1="88" x2="282" y2="88" stroke="#52C41A" stroke-dasharray="2 3" stroke-width="0.6"/>
+              <!-- y axis labels -->
+              <text x="2" y="32" font-size="9" fill="#86909C">14</text>
+              <text x="2" y="55" font-size="9" fill="#52C41A">8</text>
+              <text x="2" y="93" font-size="9" fill="#52C41A">4</text>
+              <text x="2" y="120" font-size="9" fill="#86909C">0</text>
+              <!-- x axis labels -->
+              <text x="22" y="135" font-size="8" fill="#86909C">4-1</text>
+              <text x="100" y="135" font-size="8" fill="#86909C">4-10</text>
+              <text x="180" y="135" font-size="8" fill="#86909C">4-20</text>
+              <text x="245" y="135" font-size="8" fill="#86909C">4-29</text>
+              <!-- line path -->
+              <polyline fill="none" stroke="#FF9F40" stroke-width="2"
+                points="22,80 38,72 54,90 70,68 86,75 102,98 118,82 134,65 150,72 166,40 182,55 198,80 214,28 230,52 246,68 262,75"/>
+              <!-- dots -->
+              <circle cx="22" cy="80" r="2.5" fill="#FAAD14"/>
+              <circle cx="54" cy="90" r="2.5" fill="#52C41A"/>
+              <circle cx="86" cy="75" r="2.5" fill="#FAAD14"/>
+              <circle cx="118" cy="82" r="2.5" fill="#FAAD14"/>
+              <circle cx="166" cy="40" r="2.5" fill="#F5222D"/>
+              <circle cx="214" cy="28" r="2.5" fill="#F5222D"/>
+              <circle cx="262" cy="75" r="2.5" fill="#FAAD14"/>
+            </svg>
+          </div>
+          <div class="stats">
+            <div class="stat-card"><div class="lbl">测量次数</div><div class="num">42</div></div>
+            <div class="stat-card"><div class="lbl">平均值</div><div class="num" style="color:var(--c-ok)">8.1</div><div class="sub">mmol/L</div></div>
+            <div class="stat-card"><div class="lbl">最高 / 最低</div><div class="num">14.1<span style="font-size:14px;color:var(--text-3)"> / </span>3.6</div></div>
+            <div class="stat-card"><div class="lbl">理想占比</div><div class="num" style="color:var(--c-ideal)">38%</div></div>
+          </div>
+          <div class="card" style="margin-top:10px">
+            <div style="font-size:12px;color:var(--text-3);margin-bottom:6px">分布</div>
+            <div class="dist-row">
+              <div class="seg" style="background:var(--c-low);width:5%">2</div>
+              <div class="seg" style="background:var(--c-ideal);width:38%">16</div>
+              <div class="seg" style="background:var(--c-ok);width:35%">15</div>
+              <div class="seg" style="background:var(--c-high);width:14%">6</div>
+              <div class="seg" style="background:var(--c-vhigh);width:8%">3</div>
+            </div>
+          </div>
+        </div>
+        <div class="tabbar">
+          <div class="tb"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 11l9-8 9 8v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg><span>首页</span></div>
+          <div class="tb active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg><span>分析</span></div>
+          <div class="tb"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span>我的</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =================== P06 报表 =================== -->
+    <div class="stage">
+      <div class="stage-title">P06 · 分析-周期报表</div>
+      <div class="stage-sub">一屏可截图发给医生</div>
+      <div class="phone">
+        <div class="status-bar"><span>9:41</span><span class="right">●●● ▮</span></div>
+        <div class="nav">分析</div>
+        <div class="content">
+          <div class="seg-top">
+            <div class="s">按天矩阵</div>
+            <div class="s">趋势图</div>
+            <div class="s active">报表</div>
+          </div>
+          <div class="big-report">
+            <div class="title">最近 30 天 · 整体状态</div>
+            <div class="num">8.1<span style="font-size:18px;font-weight:500"> mmol/L</span></div>
+            <div class="sub">平均血糖 · 偏高 ⚠️</div>
+            <div style="display:flex;gap:24px;margin-top:14px">
+              <div>
+                <div style="font-size:11px;opacity:0.85">总测量数</div>
+                <div style="font-size:18px;font-weight:700">42 次</div>
+              </div>
+              <div>
+                <div style="font-size:11px;opacity:0.85">理想占比</div>
+                <div style="font-size:18px;font-weight:700">38%</div>
+              </div>
+              <div>
+                <div style="font-size:11px;opacity:0.85">异常天数</div>
+                <div style="font-size:18px;font-weight:700">9 天</div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div style="font-size:12px;color:var(--text-3);margin-bottom:6px">五档分布</div>
+            <div class="dist-row">
+              <div class="seg" style="background:var(--c-low);width:5%">2</div>
+              <div class="seg" style="background:var(--c-ideal);width:38%">16</div>
+              <div class="seg" style="background:var(--c-ok);width:35%">15</div>
+              <div class="seg" style="background:var(--c-high);width:14%">6</div>
+              <div class="seg" style="background:var(--c-vhigh);width:8%">3</div>
+            </div>
+          </div>
+          <div class="card">
+            <div style="font-size:13px;font-weight:600;margin-bottom:8px">按时段</div>
+            <div style="font-size:12px">
+              <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--line)">
+                <span>空腹</span><span style="color:var(--c-ideal);font-weight:600">5.9 · 12次 · 理想</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--line)">
+                <span>早餐后</span><span style="color:var(--c-ok);font-weight:600">8.4 · 10次 · 一般</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--line)">
+                <span>午餐后</span><span style="color:var(--c-high);font-weight:600">10.6 · 11次 · 偏高</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;padding:6px 0">
+                <span>晚餐后</span><span style="color:var(--c-ok);font-weight:600">9.2 · 9次 · 一般</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tabbar">
+          <div class="tb"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 11l9-8 9 8v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg><span>首页</span></div>
+          <div class="tb active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg><span>分析</span></div>
+          <div class="tb"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span>我的</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =================== P07 我的 =================== -->
+    <div class="stage">
+      <div class="stage-title">P07 · 我的</div>
+      <div class="stage-sub">入口聚合页</div>
+      <div class="phone">
+        <div class="status-bar"><span>9:41</span><span class="right">●●● ▮</span></div>
+        <div class="nav">我的</div>
+        <div class="content">
+          <div class="me-card">
+            <div class="ava">妈</div>
+            <div>
+              <div class="nick">妈妈</div>
+              <div class="fam">咱家 · 管理员</div>
+            </div>
+          </div>
+          <div class="menu">
+            <div class="menu-item"><span class="icon">家</span>家庭管理<span class="arrow">›</span></div>
+            <div class="menu-item"><span class="icon">设</span>自定义血糖标准<span class="arrow">›</span></div>
+            <div class="menu-item"><span class="icon">↓</span>数据导出<span class="arrow">›</span></div>
+            <div class="menu-item"><span class="icon">i</span>关于<span class="arrow">›</span></div>
+          </div>
+        </div>
+        <div class="tabbar">
+          <div class="tb"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 11l9-8 9 8v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg><span>首页</span></div>
+          <div class="tb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg><span>分析</span></div>
+          <div class="tb active"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span>我的</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =================== P08 家庭管理（管理员视图） =================== -->
+    <div class="stage">
+      <div class="stage-title">P08 · 家庭管理（管理员视图）</div>
+      <div class="stage-sub">编辑家庭名 / 邀请码 / 成员管理</div>
+      <div class="phone">
+        <div class="status-bar"><span>9:41</span><span class="right">●●● ▮</span></div>
+        <div class="nav"><span class="back">←</span>家庭管理</div>
+        <div class="content">
+          <div class="card" style="padding:14px">
+            <div style="font-size:13px;color:var(--text-3)">家庭名</div>
+            <div style="font-size:18px;font-weight:600;margin-top:4px;display:flex;justify-content:space-between;align-items:center">
+              咱家
+              <span style="font-size:12px;color:var(--primary)">编辑</span>
+            </div>
+          </div>
+          <div class="invite-box">
+            <div class="lbl">邀请码 · 家人输入即可加入（永久有效，可随时分享）</div>
+            <div class="code">A3K9F2</div>
+            <div class="invite-actions">
+              <button>复制</button>
+              <button style="background:#52C41A;color:white;border-color:#52C41A">分享到微信</button>
+            </div>
+          </div>
+          <div style="font-size:13px;color:var(--text-2);padding:6px 4px;font-weight:600;display:flex;justify-content:space-between">
+            <span>家庭成员（3）</span>
+          </div>
+          <div class="card" style="padding:0">
+            <div class="member">
+              <span class="ava">妈</span>
+              <span class="name">妈妈（我）</span>
+              <span class="role">管理员</span>
+              <span class="joined">3-15 加入</span>
+            </div>
+            <div class="member">
+              <span class="ava">女</span>
+              <span class="name">女儿</span>
+              <span class="joined">3-16</span>
+              <span style="margin-left:8px;font-size:11px;color:var(--c-vhigh);padding:2px 8px;border:1px solid #FFCDD2;border-radius:10px">移除</span>
+            </div>
+            <div class="member">
+              <span class="ava">儿</span>
+              <span class="name">儿子</span>
+              <span class="joined">3-20</span>
+              <span style="margin-left:8px;font-size:11px;color:var(--c-vhigh);padding:2px 8px;border:1px solid #FFCDD2;border-radius:10px">移除</span>
+            </div>
+          </div>
+          <div style="margin-top:14px">
+            <button class="btn-ghost" style="color:var(--c-vhigh);border-color:#FFCDD2">解散家庭</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =================== P08b 家庭管理（成员视图） =================== -->
+    <div class="stage">
+      <div class="stage-title">P08b · 家庭管理（成员视图）</div>
+      <div class="stage-sub">无邀请码 / 无管理操作</div>
+      <div class="phone">
+        <div class="status-bar"><span>9:41</span><span class="right">●●● ▮</span></div>
+        <div class="nav"><span class="back">←</span>家庭管理</div>
+        <div class="content">
+          <div class="card" style="padding:14px">
+            <div style="font-size:13px;color:var(--text-3)">家庭名</div>
+            <div style="font-size:18px;font-weight:600;margin-top:4px">
+              咱家
+            </div>
+          </div>
+          <div class="card" style="padding:12px 14px;margin-bottom:10px">
+            <div style="font-size:13px;color:var(--text-3);margin-bottom:4px">我的角色</div>
+            <div style="font-size:15px;display:flex;align-items:center;gap:8px">
+              <span style="font-size:11px;color:var(--primary-deep);background:#FFF1E0;padding:2px 8px;border-radius:8px">成员</span>
+              <span style="color:var(--text-3);font-size:12px">可记录、可查看，不可管理</span>
+            </div>
+          </div>
+          <div style="font-size:13px;color:var(--text-2);padding:6px 4px;font-weight:600">家庭成员（3）</div>
+          <div class="card" style="padding:0">
+            <div class="member">
+              <span class="ava">妈</span>
+              <span class="name">妈妈</span>
+              <span class="role">管理员</span>
+              <span class="joined">3-15 加入</span>
+            </div>
+            <div class="member">
+              <span class="ava">女</span>
+              <span class="name">女儿（我）</span>
+              <span class="joined">3-16 加入</span>
+            </div>
+            <div class="member">
+              <span class="ava">儿</span>
+              <span class="name">儿子</span>
+              <span class="joined">3-20 加入</span>
+            </div>
+          </div>
+          <div style="margin-top:14px">
+            <button class="btn-ghost" style="color:var(--c-vhigh);border-color:#FFCDD2">退出家庭</button>
+          </div>
+          <div style="font-size:11px;color:var(--text-3);text-align:center;margin-top:8px;line-height:1.6">
+            如需邀请新家人，请联系管理员
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =================== P09 加入家庭 =================== -->
+    <div class="stage">
+      <div class="stage-title">P09 · 加入家庭</div>
+      <div class="stage-sub">首次进入二选一</div>
+      <div class="phone">
+        <div class="status-bar"><span>9:41</span><span class="right">●●● ▮</span></div>
+        <div class="nav">欢迎使用</div>
+        <div class="content">
+          <div class="join-hero">
+            <div class="icon">糖</div>
+            <h1>家有糖人</h1>
+            <p>一家人一起记录爸爸的血糖</p>
+          </div>
+          <div style="font-size:13px;color:var(--text-2);margin:8px 4px 4px">输入家人发给你的 6 位邀请码：</div>
+          <div class="code-input">A3K9F2</div>
+          <button class="btn-primary">加入家庭</button>
+          <div style="text-align:center;color:var(--text-3);font-size:12px;margin:20px 0;display:flex;align-items:center;gap:10px">
+            <div style="flex:1;height:1px;background:var(--line)"></div>
+            <span>或</span>
+            <div style="flex:1;height:1px;background:var(--line)"></div>
+          </div>
+          <button class="btn-ghost">＋ 创建新家庭</button>
+          <div style="font-size:11px;color:var(--text-3);text-align:center;margin-top:10px;line-height:1.6">
+            创建后自动生成邀请码，分享给家人。<br>家庭名需唯一，重名将无法创建。
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =================== P10 自定义标准 =================== -->
+    <div class="stage">
+      <div class="stage-title">P10 · 自定义血糖标准</div>
+      <div class="stage-sub">仅管理员可改 / 成员只读</div>
+      <div class="phone">
+        <div class="status-bar"><span>9:41</span><span class="right">●●● ▮</span></div>
+        <div class="nav"><span class="back">←</span>血糖标准</div>
+        <div class="content">
+          <div style="background:#FFF1E0;color:var(--primary-deep);padding:8px 12px;border-radius:10px;font-size:12px;margin-top:8px;display:flex;align-items:center;gap:6px">
+            <span style="font-size:11px;font-weight:600;background:white;padding:1px 6px;border-radius:6px">管理员</span>
+            <span>你可以编辑下方阈值，全家成员同步生效</span>
+          </div>
+          <div style="font-size:13px;color:var(--text-2);padding:8px 4px 4px">空腹理想区间</div>
+          <div class="set-rows-wrap">
+            <div class="set-row"><span class="l">下限</span><span class="v">4.4</span></div>
+            <div class="set-row"><span class="l">上限</span><span class="v">6.1</span></div>
+          </div>
+          <div style="font-size:13px;color:var(--text-2);padding:8px 4px 4px">餐后理想区间</div>
+          <div class="set-rows-wrap">
+            <div class="set-row"><span class="l">下限</span><span class="v">4.4</span></div>
+            <div class="set-row"><span class="l">上限</span><span class="v">7.8</span></div>
+          </div>
+          <div style="font-size:13px;color:var(--text-2);padding:8px 4px 4px">警戒值</div>
+          <div class="set-rows-wrap">
+            <div class="set-row"><span class="l">偏低警戒</span><span class="v" style="color:var(--c-low)">3.9</span></div>
+            <div class="set-row"><span class="l">过高警戒</span><span class="v" style="color:var(--c-vhigh)">13.9</span></div>
+          </div>
+          <div class="set-tip">默认值依据中国 2 型糖尿病防治指南，请遵医嘱调整。单位 mmol/L。</div>
+          <button class="btn-primary" style="margin-top:10px">保存</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- =================== P11 数据导出 =================== -->
+    <div class="stage">
+      <div class="stage-title">P11 · 数据导出</div>
+      <div class="stage-sub">CSV 文件 / 微信分享</div>
+      <div class="phone">
+        <div class="status-bar"><span>9:41</span><span class="right">●●● ▮</span></div>
+        <div class="nav"><span class="back">←</span>数据导出</div>
+        <div class="content">
+          <div style="font-size:13px;color:var(--text-2);padding:8px 4px">选择时间范围</div>
+          <div style="display:flex;gap:8px;margin-bottom:12px">
+            <div class="range-btn">最近 7 天</div>
+            <div class="range-btn active">最近 30 天</div>
+            <div class="range-btn">最近 90 天</div>
+          </div>
+          <div class="input-row" style="margin-bottom:14px">
+            <span style="color:var(--text-3)">自定义日期</span>
+            <span style="color: var(--text-3)">›</span>
+          </div>
+          <div class="card">
+            <div style="font-size:13px;color:var(--text-2);margin-bottom:8px;font-weight:600">将导出</div>
+            <div style="font-size:12px;color:var(--text-3);line-height:1.7">
+              · 时间范围：2026-03-30 ~ 2026-04-29<br>
+              · 共 42 条记录<br>
+              · 字段：日期 / 时间 / 时段 / 血糖值 / 状态 / 记录人 / 备注<br>
+              · 格式：CSV（可用 Excel 打开）
+            </div>
+          </div>
+          <button class="btn-primary" style="margin-top:14px">生成并分享 CSV</button>
+          <div style="font-size:11px;color:var(--text-3);text-align:center;margin-top:8px">
+            生成后可直接转发给医生或保存到聊天
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =================== P12 关于 =================== -->
+    <div class="stage">
+      <div class="stage-title">P12 · 关于</div>
+      <div class="stage-sub">版本与说明</div>
+      <div class="phone">
+        <div class="status-bar"><span>9:41</span><span class="right">●●● ▮</span></div>
+        <div class="nav"><span class="back">←</span>关于</div>
+        <div class="content">
+          <div class="about-logo">糖</div>
+          <div class="about-name">家有糖人</div>
+          <div class="about-ver">v0.1.0 · 家庭内部使用</div>
+          <div class="menu">
+            <div class="menu-item"><span class="icon">使</span>使用说明<span class="arrow">›</span></div>
+            <div class="menu-item"><span class="icon">隐</span>隐私说明<span class="arrow">›</span></div>
+            <div class="menu-item"><span class="icon">联</span>联系开发者<span class="arrow">›</span></div>
+          </div>
+          <div style="font-size:11px;color:var(--text-3);text-align:center;margin-top:24px;line-height:1.6">
+            本小程序仅供本家庭成员记录与查看血糖数据使用，<br>不构成医疗建议，请遵医嘱。
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="foot">
+    家有糖人 · 界面原型 v0.3 · 2026-04-29<br>
+    若需调整布局/字段/颜色，回到对话告诉我即可。
+  </div>
+</div>
+</body>
+</html>

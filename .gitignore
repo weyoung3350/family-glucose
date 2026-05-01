@@ -1,0 +1,63 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+*.egg
+
+# 敏感信息（绝对不能入库）
+.env
+.env.production
+.env.local
+*secret*
+*credentials*
+
+# 数据库
+backend/data/
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+
+# 日志
+*.log
+/tmp/glucose-logs/
+
+# 微信小程序
+miniprogram_npm/
+miniprogram/.idea/
+project.private.config.json
+
+# 备份
+*.bak
+*.backup
+backup/
+backups/
+
+# macOS
+.DS_Store
+._*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 验收/测试结果
+sprint*-acceptance.json
+*.test-result.json
+docs/tasks/_acceptance/screenshots/
+
+# Node
+node_modules/
+package-lock.json
+
+# 临时
+/tmp/
+*.tmp

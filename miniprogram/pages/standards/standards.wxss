@@ -1,0 +1,8 @@
+.hint-card { background: #FFF3E8; color: #F08A2C; border-radius: 22rpx; padding: 22rpx; margin-bottom: 20rpx; }
+.group-title { font-size: 34rpx; font-weight: 900; margin-bottom: 12rpx; }
+.line { display: flex; justify-content: space-between; padding: 24rpx 0; border-bottom: 1rpx solid #F2F3F5; }
+.line text:last-child { color: #FF9F40; font-weight: 900; }
+.line.low text:last-child { color: #4DA3FF; }
+.line.high text:last-child { color: #F5222D; }
+.desc { color: #86909C; font-size: 26rpx; line-height: 1.6; margin: 24rpx 0 36rpx; }
+.save { margin-top: 20rpx; }

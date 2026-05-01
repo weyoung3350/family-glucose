@@ -1,0 +1,14 @@
+.join-page { padding-top: 80rpx; }
+.hero { display: flex; flex-direction: column; align-items: center; margin-bottom: 56rpx; }
+.logo { width: 144rpx; height: 144rpx; border-radius: 36rpx; background: linear-gradient(135deg, #FFB066, #FF9F40); color: #FFFFFF; font-size: 76rpx; font-weight: 900; display: flex; align-items: center; justify-content: center; }
+.name { font-size: 48rpx; font-weight: 900; margin-top: 28rpx; }
+.desc { color: #86909C; margin-top: 12rpx; font-size: 30rpx; }
+.label { color: #4E5969; margin-bottom: 18rpx; }
+.code-input { height: 112rpx; border: 3rpx dashed #FF9F40; border-radius: 24rpx; text-align: center; letter-spacing: 8rpx; font-size: 42rpx; font-weight: 800; color: #F08A2C; margin-bottom: 26rpx; }
+.divider { text-align: center; color: #86909C; margin: 28rpx 0; }
+.modal-mask { position: fixed; inset: 0; background: rgba(0,0,0,.35); display: flex; align-items: center; justify-content: center; padding: 40rpx; }
+.modal { background: #FFFFFF; border-radius: 28rpx; padding: 34rpx; width: 100%; }
+.modal-title { font-size: 36rpx; font-weight: 800; margin-bottom: 24rpx; }
+.name-input { height: 92rpx; border-bottom: 1rpx solid #E5E6EB; font-size: 34rpx; }
+.error { color: #F5222D; font-size: 26rpx; margin-top: 14rpx; }
+.modal-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 18rpx; margin-top: 34rpx; }

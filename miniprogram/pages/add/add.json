@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "记一次血糖",
+  "usingComponents": {
+    "period-picker": "/components/period-picker/period-picker"
+  }
+}

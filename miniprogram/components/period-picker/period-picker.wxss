@@ -1,0 +1,7 @@
+.period-picker { display: flex; flex-direction: column; gap: 18rpx; }
+.meals { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14rpx; }
+.meal { height: 96rpx; border-radius: 20rpx; background: #FFFFFF; border: 1rpx solid #E5E6EB; color: #4E5969; font-size: 30rpx; display: flex; align-items: center; justify-content: center; }
+.meal.active { background: #FF9F40; border-color: #FF9F40; color: #FFFFFF; font-weight: 700; }
+.ba-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14rpx; }
+.ba-chip { height: 88rpx; border-radius: 18rpx; background: #FFF7ED; border: 1rpx solid #FFD9A8; color: #4E5969; font-size: 30rpx; display: flex; align-items: center; justify-content: center; }
+.ba-chip.active { background: #FF9F40; border-color: #FF9F40; color: #FFFFFF; font-weight: 700; }

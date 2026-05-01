@@ -1,0 +1,56 @@
+page {
+  --primary: #FF9F40;
+  --primary-deep: #F08A2C;
+  --bg: #F5F5F5;
+  --card: #FFFFFF;
+  --text: #1F2329;
+  --text-2: #4E5969;
+  --text-3: #86909C;
+  --line: #E5E6EB;
+  --c-low: #4DA3FF;
+  --c-ideal: #52C41A;
+  --c-ok: #FAAD14;
+  --c-high: #FA8C16;
+  --c-vhigh: #F5222D;
+  background: var(--bg);
+  font-size: 32rpx;
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: #FFFFFF;
+  height: 96rpx;
+  border-radius: 48rpx;
+  font-size: 34rpx;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-ghost {
+  background: #FFFFFF;
+  color: var(--text);
+  height: 88rpx;
+  border-radius: 44rpx;
+  border: 1rpx solid var(--line);
+  font-size: 30rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card {
+  background: var(--card);
+  border-radius: 24rpx;
+  padding: 28rpx;
+  margin-bottom: 20rpx;
+}
+
+.page {
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 24rpx;
+}

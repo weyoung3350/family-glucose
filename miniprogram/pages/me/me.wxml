@@ -1,0 +1,15 @@
+<view class="page me-page">
+  <view class="profile">
+    <view class="avatar">{{avatarText}}</view>
+    <view>
+      <view class="nickname">{{user.nickname || '我'}}</view>
+      <view class="family">{{family.name || '未加入家庭'}} · {{roleText}}</view>
+    </view>
+  </view>
+  <view class="menu card">
+    <view bindtap="goFamily"><view class="icon">家</view><text>家庭管理</text><text class="arrow">›</text></view>
+    <view bindtap="goStandards"><view class="icon">设</view><text>自定义血糖标准</text><text class="arrow">›</text></view>
+    <view bindtap="goExport"><view class="icon">导</view><text>数据导出</text><text class="arrow">›</text></view>
+    <view bindtap="goAbout"><view class="icon">i</view><text>关于</text><text class="arrow">›</text></view>
+  </view>
+</view>

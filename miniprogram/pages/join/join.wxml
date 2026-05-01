@@ -1,0 +1,26 @@
+<view class="page join-page">
+  <view class="hero">
+    <view class="logo">糖</view>
+    <view class="name">家有糖人</view>
+    <view class="desc">一家人一起守护家人血糖健康</view>
+  </view>
+  <view class="card">
+    <view class="label">输入家人分享的邀请码</view>
+    <input class="code-input" value="{{code}}" maxlength="6" bindinput="onCodeInput" placeholder="6 位邀请码" />
+    <view class="btn-primary join-btn" bindtap="onJoin">加入家庭</view>
+  </view>
+  <view class="divider">或</view>
+  <view class="btn-ghost create-btn" bindtap="showCreateDialog">＋ 创建新家庭</view>
+
+  <view wx:if="{{showCreate}}" class="modal-mask">
+    <view class="modal">
+      <view class="modal-title">创建家庭</view>
+      <input class="name-input" maxlength="20" placeholder="例如：咱家" value="{{familyName}}" bindinput="onNameInput" />
+      <view wx:if="{{createError}}" class="error">{{createError}}</view>
+      <view class="modal-actions">
+        <view class="btn-ghost" bindtap="hideCreateDialog">取消</view>
+        <view class="btn-primary" bindtap="onCreate">创建</view>
+      </view>
+    </view>
+  </view>
+</view>

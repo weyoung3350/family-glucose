@@ -1,0 +1,67 @@
+<view class="page analytics-page">
+  <view class="segment">
+    <view class="{{tab === 'matrix' ? 'active' : ''}}" data-tab="matrix" bindtap="switchTab">按天矩阵</view>
+    <view class="{{tab === 'chart' ? 'active' : ''}}" data-tab="chart" bindtap="switchTab">趋势图</view>
+    <view class="{{tab === 'report' ? 'active' : ''}}" data-tab="report" bindtap="switchTab">报表</view>
+  </view>
+
+  <view wx:if="{{tab === 'matrix'}}" class="card matrix">
+    <view class="matrix-tip">‹ 左右滑动查看完整时段 ›</view>
+    <view class="matrix-head">
+      <text>日期</text>
+      <text wx:for="{{periods}}" wx:key="key">{{item.short}}</text>
+    </view>
+    <view class="matrix-row" wx:for="{{matrix}}" wx:key="date">
+      <text class="date">{{item.date}}</text>
+      <view wx:for="{{item.cellsList}}" wx:key="key" data-id="{{item.cell.id}}" bindtap="onCellTap" class="cell" style="background: {{item.cell ? item.cell.status.color : '#F2F3F5'}}">
+        {{item.cell ? item.cell.value : '-'}}
+      </view>
+    </view>
+  </view>
+
+  <view wx:if="{{tab === 'chart'}}">
+    <view class="chips">
+      <view class="{{chartFilter === 'all' ? 'active' : ''}}" data-filter="all" bindtap="setChartFilter">全部时段</view>
+      <view class="{{chartFilter === 'fasting' ? 'active' : ''}}" data-filter="fasting" bindtap="setChartFilter">空腹</view>
+      <view class="{{chartFilter === 'after' ? 'active' : ''}}" data-filter="after" bindtap="setChartFilter">餐后</view>
+    </view>
+    <view class="card chart-box" wx:if="{{chart}}">
+      <canvas type="2d" id="trendCanvas" class="trend-canvas"></canvas>
+      <view wx:if="{{chart.points.length === 0}}" class="empty-chart">暂无趋势数据</view>
+    </view>
+    <view class="card stats" wx:if="{{chart}}">
+      <view><text>测量次数</text><b>{{chart.stats.count}}</b></view>
+      <view><text>平均值</text><b>{{chart.stats.avg || '-'}}</b></view>
+      <view><text>最高/最低</text><b>{{chart.stats.max || '-'}} / {{chart.stats.min || '-'}}</b></view>
+    </view>
+    <view class="card distribution" wx:if="{{chart}}">
+      <view class="dist-title">分布</view>
+      <view class="dist-bar">
+        <view wx:for="{{distributionRows}}" wx:key="key" style="width: {{item.width}}%; background: {{item.color}}"></view>
+      </view>
+      <view class="dist-row" wx:for="{{distributionRows}}" wx:key="key">
+        <view class="dist-name"><view class="dist-dot" style="background: {{item.color}}"></view><text>{{item.label}}</text></view>
+        <text>{{item.count}} 次 · {{item.width}}%</text>
+      </view>
+    </view>
+  </view>
+
+  <view wx:if="{{tab === 'report' && report}}">
+    <view class="report-hero">
+      <view>平均血糖</view>
+      <view class="avg">{{report.summary.avg || '-'}}</view>
+      <view>{{report.summary.overall_status ? report.summary.overall_status.label : '暂无数据'}}</view>
+    </view>
+    <view class="card stats">
+      <view><text>总测量数</text><b>{{report.summary.count}}</b></view>
+      <view><text>理想占比</text><b>{{report.summary.ideal_pct}}</b></view>
+      <view><text>异常天数</text><b>{{report.summary.abnormal_days}}</b></view>
+    </view>
+    <view class="card">
+      <view class="period-stat" wx:for="{{report.by_period}}" wx:key="period">
+        <text>{{item.period_label}}</text>
+        <text>{{item.avg || '-'}} · {{item.count}}次 · {{item.status ? item.status.label : '-'}}</text>
+      </view>
+    </view>
+  </view>
+</view>
