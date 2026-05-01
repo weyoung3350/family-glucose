@@ -2,7 +2,7 @@
 .label { color: #86909C; font-size: 28rpx; margin-bottom: 10rpx; }
 .name { font-size: 38rpx; font-weight: 900; }
 .edit { color: #F08A2C; }
-.code { font-size: 58rpx; font-weight: 900; letter-spacing: 10rpx; color: #FF9F40; text-align: center; margin: 28rpx 0; font-family: SF Mono, Menlo, Monaco, Consolas, monospace; }
+.code { display: block; font-size: 58rpx; font-weight: 900; letter-spacing: 10rpx; color: #FF9F40; text-align: center; margin: 28rpx 0; font-family: SF Mono, Menlo, Monaco, Consolas, monospace; user-select: text; -webkit-user-select: text; }
 .invite-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 18rpx; }
 .share-btn { height: 88rpx; border-radius: 44rpx; background: #FF9F40; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 30rpx; }
 .section-title { font-weight: 900; margin-bottom: 16rpx; }

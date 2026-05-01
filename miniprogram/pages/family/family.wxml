@@ -9,7 +9,7 @@
 
   <view wx:if="{{isCreator}}" class="card invite">
     <view class="label">邀请码 · 家人输入即可加入（永久有效，可随时分享）</view>
-    <view class="code">{{family.invite_code}}</view>
+    <text class="code" user-select="{{true}}" selectable="{{true}}">{{family.invite_code}}</text>
     <view class="invite-actions">
       <view class="btn-ghost" bindtap="copyCode">复制</view>
       <button class="share-btn" open-type="share">分享到微信</button>

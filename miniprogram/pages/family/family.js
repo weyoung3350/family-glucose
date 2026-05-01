@@ -27,7 +27,14 @@ Page({
     wx.setClipboardData({
       data: code,
       success: () => wx.showToast({ title: '邀请码已复制', icon: 'success' }),
-      fail: () => wx.showToast({ title: '复制失败，请手动选择长按复制', icon: 'none' }),
+      fail: () => {
+        wx.showModal({
+          title: '请手动复制',
+          content: `系统拒绝了自动复制。请长按上方的邀请码 ${code} 选中后复制。`,
+          showCancel: false,
+          confirmText: '我知道了',
+        })
+      },
     })
   },
   editName() {
