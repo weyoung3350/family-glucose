@@ -1,4 +1,4 @@
-"""阿里 DashScope 语音识别（qwen-audio-turbo）。
+"""阿里 DashScope 语音识别（qwen-omni-turbo，OpenAI 兼容模式）。
 
 接收音频字节流（小程序上传 mp3），同步返回转写文字。
 失败时抛出 ASRError。
@@ -17,7 +17,9 @@ class ASRError(Exception):
         super().__init__(f"{code}: {message}")
 
 
-_TRANSCRIBE_PROMPT = "请把这段语音原样转写成文字，不要添加任何解释或标点修正，直接输出转写结果。"
+_TRANSCRIBE_PROMPT = (
+    "请把这段语音原样转写成文字，只输出转写结果，不要添加任何解释、标点修正或前后缀。"
+)
 
 
 async def transcribe(audio_bytes: bytes, mime: str = "audio/mp3") -> str:
@@ -29,25 +31,37 @@ async def transcribe(audio_bytes: bytes, mime: str = "audio/mp3") -> str:
         raise ASRError("ERR_AUDIO_TOO_LARGE", "录音过长，请缩短到 60 秒内")
 
     audio_b64 = base64.b64encode(audio_bytes).decode()
+    audio_format = "mp3"
+    if mime and "/" in mime:
+        ext = mime.split("/", 1)[1].split(";", 1)[0].strip().lower()
+        if ext in {"mp3", "wav", "m4a", "aac", "amr", "ogg"}:
+            audio_format = ext
+
     payload = {
-        "model": "qwen-audio-turbo",
-        "input": {
-            "messages": [
-                {
-                    "role": "user",
-                    "content": [
-                        {"audio": f"data:{mime};base64,{audio_b64}"},
-                        {"text": _TRANSCRIBE_PROMPT},
-                    ],
-                }
-            ]
-        },
+        "model": settings.ASR_MODEL,
+        "modalities": ["text"],
+        "stream": False,
+        "messages": [
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "input_audio",
+                        "input_audio": {
+                            "data": f"data:audio/{audio_format};base64,{audio_b64}",
+                            "format": audio_format,
+                        },
+                    },
+                    {"type": "text", "text": _TRANSCRIBE_PROMPT},
+                ],
+            }
+        ],
     }
     headers = {
         "Authorization": f"Bearer {settings.DASHSCOPE_API_KEY}",
         "Content-Type": "application/json",
     }
-    url = f"{settings.DASHSCOPE_BASE_URL}/services/aigc/multimodal-generation/generation"
+    url = f"{settings.DASHSCOPE_BASE_URL}/chat/completions"
 
     try:
         async with httpx.AsyncClient(timeout=settings.ASR_TIMEOUT_SEC) as client:
@@ -56,9 +70,14 @@ async def transcribe(audio_bytes: bytes, mime: str = "audio/mp3") -> str:
         raise ASRError("ERR_ASR_NETWORK", "语音识别服务连接失败") from exc
 
     if response.status_code != 200:
+        try:
+            err_body = response.json()
+            err_msg = (err_body.get("error") or {}).get("message") or err_body.get("message")
+        except ValueError:
+            err_msg = response.text[:200]
         raise ASRError(
             "ERR_ASR_HTTP",
-            f"语音识别服务异常 (HTTP {response.status_code})",
+            f"语音识别服务异常 (HTTP {response.status_code}): {err_msg}",
         )
 
     try:
@@ -66,24 +85,22 @@ async def transcribe(audio_bytes: bytes, mime: str = "audio/mp3") -> str:
     except ValueError as exc:
         raise ASRError("ERR_ASR_PARSE", "语音识别响应格式异常") from exc
 
-    if "output" not in data:
-        msg = data.get("message", "语音识别失败")
-        raise ASRError("ERR_ASR_API", f"识别失败：{msg}")
-
     try:
-        choices = data["output"].get("choices") or []
+        choices = data.get("choices") or []
         if not choices:
             raise KeyError("no choices")
-        content = choices[0]["message"]["content"]
+        message = choices[0].get("message") or {}
+        content = message.get("content")
         if isinstance(content, list):
+            text_parts = []
             for item in content:
-                if isinstance(item, dict) and "text" in item:
-                    text = item["text"]
-                    break
-            else:
-                raise KeyError("no text in content list")
+                if isinstance(item, dict) and item.get("type") == "text":
+                    text_parts.append(item.get("text") or "")
+                elif isinstance(item, dict) and "text" in item:
+                    text_parts.append(item.get("text") or "")
+            text = "".join(text_parts)
         else:
-            text = content
+            text = content or ""
     except (KeyError, IndexError, TypeError) as exc:
         raise ASRError("ERR_ASR_PARSE", "语音识别响应格式异常") from exc
 
