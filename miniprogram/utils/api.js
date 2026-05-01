@@ -89,6 +89,7 @@ const api = {
   report: (query) => request('GET', '/analytics/report', { query }),
   csvUrl: (query) => appendQuery(`${API_BASE}/export/csv`, { ...query, token: getApp().globalData.token }),
   parseRecord: (text) => request('POST', '/ai/parse-record', { data: { text } }),
+  getMe: () => request('GET', '/users/me'),
   updateProfile: (data) => request('PATCH', '/users/me', { data }),
 }
 

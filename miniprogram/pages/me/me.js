@@ -4,6 +4,7 @@ Page({
   data: { user: {}, family: {}, roleText: '未加入', avatarText: '我' },
   onShow() {
     this.refresh()
+    this.refreshFromServer()
   },
   refresh() {
     const app = getApp()
@@ -15,6 +16,17 @@ Page({
       roleText: family.role_of_me === 'creator' ? '管理员' : (family.role_of_me === 'member' ? '成员' : '未加入'),
       avatarText: user.nickname ? user.nickname.slice(0, 1) : '我',
     })
+  },
+  async refreshFromServer() {
+    try {
+      const fresh = await api.getMe()
+      const app = getApp()
+      app.globalData.user = fresh
+      wx.setStorageSync('user', fresh)
+      this.refresh()
+    } catch (err) {
+      // 静默失败：保持本地缓存即可
+    }
   },
   editNickname() {
     const current = (this.data.user && this.data.user.nickname) || ''

@@ -125,6 +125,12 @@ def get_me(user: User = Depends(get_current_user)) -> dict[str, int]:
     return {"id": user.id}
 
 
+@router.get("/api/v1/users/me", response_model=UserDTO)
+def get_user_me(user: User = Depends(get_current_user)) -> UserDTO:
+    """供前端在 onShow 时刷新当前用户信息（含 nickname 兜底）。"""
+    return build_user_dto(user)
+
+
 @router.patch("/api/v1/users/me", response_model=UserDTO)
 def update_profile(
     req: UpdateProfileRequest,
