@@ -2,6 +2,8 @@
 .avatar { width: 108rpx; height: 108rpx; border-radius: 50%; background: rgba(255,255,255,.25); display: flex; align-items: center; justify-content: center; font-size: 48rpx; font-weight: 900; }
 .nickname { font-size: 40rpx; font-weight: 900; }
 .family { margin-top: 10rpx; opacity: .9; }
-.menu view { display: grid; grid-template-columns: 84rpx 1fr 30rpx; align-items: center; padding: 28rpx 0; border-bottom: 1rpx solid #F2F3F5; gap: 18rpx; }
-.icon { width: 64rpx; height: 64rpx; border-radius: 18rpx; background: #FFF3E8; color: #F08A2C; display: flex; align-items: center; justify-content: center; font-size: 32rpx; font-weight: 700; }
-.menu .arrow { color: #C9CDD4; font-size: 36rpx; text-align: right; }
+.menu-item { display: grid; grid-template-columns: 64rpx 1fr 30rpx; align-items: center; padding: 28rpx 0; border-bottom: 1rpx solid #F2F3F5; gap: 18rpx; }
+.menu-item:last-child { border-bottom: none; }
+.menu-item .icon { width: 64rpx; height: 64rpx; border-radius: 18rpx; background: #FFF3E8; color: #F08A2C; display: flex; align-items: center; justify-content: center; font-size: 32rpx; font-weight: 700; }
+.menu-item .menu-text { color: #1F2329; font-size: 32rpx; }
+.menu-item .arrow { color: #C9CDD4; font-size: 36rpx; text-align: right; }
