@@ -1,4 +1,5 @@
 const { api } = require('../../utils/api.js')
+const errors = require('../../utils/errors.js')
 
 Page({
   data: {
@@ -47,8 +48,7 @@ Page({
       wx.setStorageSync('family', res.family)
       wx.switchTab({ url: '/pages/index/index' })
     } catch (err) {
-      const msg = err.code === 'ERR_INVITE_CODE_INVALID' ? '邀请码不存在' : (err.message || '操作失败')
-      wx.showToast({ title: msg, icon: 'none' })
+      errors.toast(err, '操作失败')
     } finally {
       this.setData({ loading: false })
     }

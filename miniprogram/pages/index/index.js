@@ -1,6 +1,7 @@
 const { api } = require('../../utils/api.js')
 const { relative, dateOnly } = require('../../utils/time.js')
 const offline = require('../../utils/offline.js')
+const errors = require('../../utils/errors.js')
 
 Page({
   data: {
@@ -89,7 +90,7 @@ Page({
         todayCount: typeof res.total_today === 'number' ? res.total_today : items.filter((item) => dateOnly(item.measured_at) === dateOnly(new Date())).length,
       })
     } catch (err) {
-      wx.showToast({ title: err.message || '加载失败', icon: 'none' })
+      errors.toast(err, '加载失败')
     } finally {
       this.setData({ loading: false })
     }

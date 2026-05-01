@@ -1,4 +1,5 @@
 const { API_BASE } = require('./const.js')
+const { ERROR_LABELS } = require('./errors.js')
 
 function appendQuery(url, query) {
   const qs = Object.entries(query || {})
@@ -32,15 +33,13 @@ function request(method, path, { data, query, headers } = {}) {
         if (res.statusCode >= 200 && res.statusCode < 300) {
           resolve(res.data || {})
         } else {
-          reject(res.data && res.data.code ? res.data : { code: 'ERR_HTTP', message: '网络异常' })
+          reject(res.data && res.data.code ? res.data : { code: 'ERR_HTTP', message: ERROR_LABELS.ERR_HTTP })
         }
       },
       fail: (err) => {
         const isTimeout = err && err.errMsg && err.errMsg.indexOf('timeout') >= 0
-        reject({
-          code: isTimeout ? 'ERR_TIMEOUT' : 'ERR_NETWORK',
-          message: isTimeout ? '请求超时，请检查网络后重试' : '无法连接服务器',
-        })
+        const code = isTimeout ? 'ERR_TIMEOUT' : 'ERR_NETWORK'
+        reject({ code, message: ERROR_LABELS[code] })
       },
     })
   })
@@ -111,15 +110,13 @@ function uploadFile(path, filePath, name) {
         if (res.statusCode >= 200 && res.statusCode < 300) {
           resolve(data)
         } else {
-          reject(data && data.code ? data : { code: 'ERR_HTTP', message: data.message || '上传失败' })
+          reject(data && data.code ? data : { code: 'ERR_HTTP', message: data.message || ERROR_LABELS.ERR_HTTP })
         }
       },
       fail: (err) => {
         const isTimeout = err && err.errMsg && err.errMsg.indexOf('timeout') >= 0
-        reject({
-          code: isTimeout ? 'ERR_TIMEOUT' : 'ERR_NETWORK',
-          message: isTimeout ? '请求超时，请检查网络后重试' : '无法连接服务器',
-        })
+        const code = isTimeout ? 'ERR_TIMEOUT' : 'ERR_NETWORK'
+        reject({ code, message: ERROR_LABELS[code] })
       },
     })
   })

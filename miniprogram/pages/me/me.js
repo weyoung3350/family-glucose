@@ -1,4 +1,5 @@
 const { api } = require('../../utils/api.js')
+const errors = require('../../utils/errors.js')
 
 Page({
   data: { user: {}, family: {}, roleText: '未加入', avatarText: '我' },
@@ -50,7 +51,7 @@ Page({
           this.refresh()
           wx.showToast({ title: '已修改' })
         } catch (err) {
-          wx.showToast({ title: err.message || '修改失败', icon: 'none' })
+          errors.toast(err, '修改失败')
         }
       },
     })

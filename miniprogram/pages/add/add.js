@@ -2,6 +2,7 @@ const { api } = require('../../utils/api.js')
 const { periods, periodLabel } = require('../../utils/period.js')
 const { roundTo5Min, formatDate, toLocalIso } = require('../../utils/time.js')
 const offline = require('../../utils/offline.js')
+const errors = require('../../utils/errors.js')
 
 const HOURS = Array.from({ length: 24 }, (_, i) => String(i).padStart(2, '0'))
 const MINUTES = ['00', '05', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55']
@@ -125,7 +126,7 @@ Page({
         setTimeout(() => wx.navigateBack(), 1500)
         return
       }
-      wx.showToast({ title: err.message || '保存失败', icon: 'none' })
+      errors.toast(err, '保存失败')
     }
   },
 
@@ -150,10 +151,7 @@ Page({
         error: '',
       })
     } catch (err) {
-      let msg = '识别失败，请稍后再试'
-      if (err.code === 'ERR_NETWORK' || err.code === 'ERR_TIMEOUT') msg = err.message
-      else if (err.code === 'ERR_AI_PARSE') msg = '内容格式无法识别，请换种说法或手动录入'
-      this.setData({ error: msg })
+      this.setData({ error: errors.describe(err) })
     } finally {
       this.setData({ parsing: false })
     }
@@ -272,12 +270,7 @@ Page({
         canSave: Boolean(parsed.value && parsed.period),
       })
     } catch (err) {
-      let msg = '语音识别失败，请重试'
-      if (err.code === 'ERR_AUDIO_TOO_LARGE') msg = '录音过长，请缩短到 60 秒内'
-      else if (err.code === 'ERR_ASR_EMPTY') msg = '没听清，请再说一遍'
-      else if (err.code === 'ERR_NETWORK' || err.code === 'ERR_TIMEOUT') msg = err.message
-      else if (err.message) msg = err.message
-      this.setData({ error: msg })
+      this.setData({ error: errors.describe(err) })
     } finally {
       this.setData({ parsing: false, recordHint: '' })
     }
@@ -351,7 +344,7 @@ Page({
         setTimeout(() => wx.switchTab({ url: '/pages/index/index' }), 1500)
         return
       }
-      wx.showToast({ title: err.message || '保存失败', icon: 'none' })
+      errors.toast(err, '保存失败')
     }
   },
   buildMissingText(missing) {

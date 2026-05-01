@@ -3,7 +3,7 @@
 .name { font-size: 44rpx; font-weight: 900; margin-top: 26rpx; }
 .version { color: #86909C; margin: 12rpx 0 40rpx; }
 .menu { text-align: left; }
-.menu view { display: flex; justify-content: space-between; padding: 26rpx 0; border-bottom: 1rpx solid #F2F3F5; }
+.menu > view { display: flex; justify-content: space-between; padding: 26rpx 0; border-bottom: 1rpx solid #F2F3F5; }
 .changelog { margin-top: 24rpx; text-align: left; }
 .log-title { font-size: 30rpx; font-weight: 800; color: #1D2129; margin-bottom: 14rpx; }
 .log-text { font-size: 26rpx; line-height: 1.7; color: #4E5969; }

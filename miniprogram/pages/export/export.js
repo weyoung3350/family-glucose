@@ -18,21 +18,41 @@ Page({
     this.setData({ total: res.total })
   },
   async onDownload() {
-    if (this.data.total === 0) wx.showToast({ title: '没有记录', icon: 'none' })
+    if (this.data.total === 0) {
+      wx.showToast({ title: '当前区间没有记录', icon: 'none' })
+      return
+    }
     const url = api.csvUrl({ from: this.data.from, to: this.data.to })
+    wx.showLoading({ title: '生成中…', mask: true })
     wx.downloadFile({
       url,
       success: (res) => {
+        wx.hideLoading()
         if (res.statusCode !== 200) {
-          wx.showToast({ title: '下载失败', icon: 'none' })
+          wx.showToast({ title: `下载失败（${res.statusCode}）`, icon: 'none' })
           return
         }
-        wx.shareFileMessage({
-          filePath: res.tempFilePath,
-          fail: () => wx.openDocument({ filePath: res.tempFilePath, fileType: 'csv' }),
-        })
+        wx.showToast({ title: '已生成', icon: 'success', duration: 800 })
+        setTimeout(() => {
+          wx.shareFileMessage({
+            filePath: res.tempFilePath,
+            fail: () => wx.openDocument({ filePath: res.tempFilePath, fileType: 'csv' }),
+          })
+        }, 800)
       },
-      fail: () => wx.showToast({ title: '下载失败', icon: 'none' }),
+      fail: (err) => {
+        wx.hideLoading()
+        const errMsg = (err && err.errMsg) || ''
+        if (errMsg.indexOf('url not in domain list') >= 0) {
+          wx.showModal({
+            title: 'CSV 导出未启用',
+            content: '请联系管理员在小程序后台开通 downloadFile 合法域名',
+            showCancel: false,
+          })
+        } else {
+          wx.showToast({ title: '下载失败：' + (errMsg || '网络异常'), icon: 'none' })
+        }
+      },
     })
   },
 })

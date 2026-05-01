@@ -1,5 +1,5 @@
 .range-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14rpx; margin-bottom: 22rpx; }
-.range-row view { background: #FFFFFF; border-radius: 999rpx; height: 76rpx; display: flex; align-items: center; justify-content: center; color: #4E5969; }
+.range-row > view { background: #FFFFFF; border-radius: 999rpx; height: 76rpx; display: flex; align-items: center; justify-content: center; color: #4E5969; }
 .range-row .active { background: #FF9F40; color: #FFFFFF; font-weight: 800; }
 .preview { line-height: 1.9; color: #4E5969; }
 .title { color: #1F2329; font-size: 38rpx; font-weight: 900; margin-bottom: 10rpx; }

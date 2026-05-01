@@ -2,8 +2,8 @@
 .more { position: absolute; right: 26rpx; top: 18rpx; font-size: 44rpx; color: #86909C; }
 .value { font-size: 104rpx; font-weight: 900; line-height: 1; }
 .unit,.range { color: #86909C; font-size: 28rpx; margin: 12rpx 0; }
-.meta view { display: flex; justify-content: space-between; padding: 22rpx 0; border-bottom: 1rpx solid #F2F3F5; color: #1F2329; }
-.meta view text:first-child { color: #86909C; }
+.meta > view { display: flex; justify-content: space-between; padding: 22rpx 0; border-bottom: 1rpx solid #F2F3F5; color: #1F2329; }
+.meta > view > text:first-child { color: #86909C; }
 .ai-tag { color: #FFFFFF; background: #722ED1; border-radius: 999rpx; padding: 6rpx 16rpx; font-weight: 600; }
 .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 18rpx; }
 .danger { height: 88rpx; border-radius: 44rpx; border: 1rpx solid #F5222D; color: #F5222D; background: #FFFFFF; display: flex; align-items: center; justify-content: center; }
