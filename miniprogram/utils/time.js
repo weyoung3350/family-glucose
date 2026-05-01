@@ -25,6 +25,12 @@ function formatDate(date, fmt = 'YYYY-MM-DD HH:mm') {
     .replace('mm', pad(d.getMinutes()))
 }
 
+// 本地 ISO 字符串（无 Z 后缀），与后端 now_cn() 统一约定
+function toLocalIso(date) {
+  const d = new Date(date)
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`
+}
+
 function relative(date) {
   const today = new Date()
   today.setHours(0, 0, 0, 0)
@@ -52,4 +58,4 @@ function daysAgo(days) {
   return dateOnly(d)
 }
 
-module.exports = { roundTo5Min, formatDate, relative, timeLabel, dateOnly, daysAgo }
+module.exports = { roundTo5Min, formatDate, toLocalIso, relative, timeLabel, dateOnly, daysAgo }

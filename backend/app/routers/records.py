@@ -1,4 +1,4 @@
-from datetime import date, datetime, time, timedelta, timezone
+from datetime import date, datetime, time
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query
@@ -17,7 +17,7 @@ from app.schemas.record import (
     UpdateRecordRequest,
 )
 from app.services.grading import grade_with_meta
-from app.services.time_utils import round_to_5min
+from app.services.time_utils import round_to_5min, now_cn
 
 
 router = APIRouter(prefix="/api/v1/records", tags=["records"])
@@ -102,9 +102,8 @@ def list_records(
 
     total = session.exec(count_statement).one()
 
-    # 按 +8 时区算"今天"
-    cn_tz = timezone(timedelta(hours=8))
-    today_cn = datetime.now(cn_tz).date()
+    # 按北京时间算"今天"
+    today_cn = now_cn().date()
     today_start = datetime.combine(today_cn, time.min)
     today_end = datetime.combine(today_cn, time.max)
     total_today = session.exec(
@@ -145,8 +144,8 @@ def create_record(
         measured_at=round_to_5min(req.measured_at),
         note=req.note,
         source=req.source,
-        created_at=datetime.utcnow(),
-        updated_at=datetime.utcnow(),
+        created_at=now_cn(),
+        updated_at=now_cn(),
     )
     session.add(record)
     session.commit()
@@ -183,7 +182,7 @@ def update_record(
         data["measured_at"] = round_to_5min(data["measured_at"])
     for key, value in data.items():
         setattr(record, key, value)
-    record.updated_at = datetime.utcnow()
+    record.updated_at = now_cn()
     session.add(record)
     session.commit()
     session.refresh(record)

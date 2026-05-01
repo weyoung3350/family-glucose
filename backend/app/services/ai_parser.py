@@ -8,7 +8,7 @@ import httpx
 from app.config import settings
 from app.enums import Period
 from app.schemas.ai import ParsedFields
-from app.services.time_utils import round_to_5min
+from app.services.time_utils import round_to_5min, now_cn
 
 
 SYSTEM_PROMPT = """你是中文血糖记录解析器。从用户一句话中抽取以下字段，输出严格 JSON：
@@ -283,7 +283,7 @@ def parse_by_rules(text: str, now: datetime) -> ParsedFields:
 
 
 async def parse(text: str) -> ParsedFields:
-    now = datetime.now()
+    now = now_cn()
     parsed = await parse_by_llm(text, now)
     if parsed is not None:
         return parsed

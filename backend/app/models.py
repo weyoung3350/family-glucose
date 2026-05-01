@@ -5,6 +5,7 @@ from sqlalchemy import CheckConstraint, Index
 from sqlmodel import Field, SQLModel
 
 from app.enums import Period, Role, Source
+from app.services.time_utils import now_cn
 
 
 PERIOD_VALUES = "', '".join(period.value for period in Period)
@@ -25,8 +26,8 @@ class Family(SQLModel, table=True):
     postprandial_high: float = 7.8
     critical_low: float = 3.9
     critical_high: float = 13.9
-    created_at: datetime = Field(default_factory=datetime.utcnow)
-    updated_at: datetime = Field(default_factory=datetime.utcnow)
+    created_at: datetime = Field(default_factory=now_cn)
+    updated_at: datetime = Field(default_factory=now_cn)
 
 
 class User(SQLModel, table=True):
@@ -49,7 +50,7 @@ class User(SQLModel, table=True):
     )
     role: Optional[str] = None
     joined_at: Optional[datetime] = None
-    created_at: datetime = Field(default_factory=datetime.utcnow)
+    created_at: datetime = Field(default_factory=now_cn)
 
 
 class GlucoseRecord(SQLModel, table=True):
@@ -75,5 +76,5 @@ class GlucoseRecord(SQLModel, table=True):
     measured_at: datetime = Field(index=True)
     note: Optional[str] = None
     source: str = Source.manual.value
-    created_at: datetime = Field(default_factory=datetime.utcnow)
-    updated_at: datetime = Field(default_factory=datetime.utcnow)
+    created_at: datetime = Field(default_factory=now_cn)
+    updated_at: datetime = Field(default_factory=now_cn)

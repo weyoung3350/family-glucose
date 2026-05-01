@@ -1,4 +1,16 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
+
+
+CN_TZ = timezone(timedelta(hours=8))
+
+
+def now_cn() -> datetime:
+    """北京时间（+8）的 naive datetime。
+
+    DB / API 字段约定按北京时间存（无 tz info），与前端 JavaScript Date
+    解析无 Z 后缀字符串的本地行为保持一致。
+    """
+    return datetime.now(CN_TZ).replace(tzinfo=None)
 
 
 def round_to_5min(dt: datetime) -> datetime:

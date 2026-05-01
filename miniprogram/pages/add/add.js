@@ -1,6 +1,6 @@
 const { api } = require('../../utils/api.js')
 const { periods, periodLabel } = require('../../utils/period.js')
-const { roundTo5Min, formatDate } = require('../../utils/time.js')
+const { roundTo5Min, formatDate, toLocalIso } = require('../../utils/time.js')
 const offline = require('../../utils/offline.js')
 
 const HOURS = Array.from({ length: 24 }, (_, i) => String(i).padStart(2, '0'))
@@ -62,7 +62,8 @@ Page({
   setMeasuredAt(date) {
     const d = roundTo5Min(date)
     this.setData({
-      measuredAt: d.toISOString(),
+      // 本地 ISO（无 Z 后缀），与后端 now_cn() 统一按北京时间存
+      measuredAt: toLocalIso(d),
       timeText: formatDate(d),
       timeValue: [d.getHours(), Math.floor(d.getMinutes() / 5)],
     })
@@ -320,7 +321,7 @@ Page({
         if (res.tapIndex === 1) {
           const now = new Date()
           this.setData({
-            'parsed.measured_at': now.toISOString(),
+            'parsed.measured_at': toLocalIso(now),
             'parsed.timeText': formatDate(now, 'YYYY-MM-DD HH:mm'),
             'parsed.measured_at_inferred': false,
           })

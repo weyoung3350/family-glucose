@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.exc import IntegrityError
 from sqlmodel import Session, select
 
+from app.services.time_utils import now_cn
 from app.deps import get_current_user, get_session, require_creator, require_family
 from app.enums import Role
 from app.models import Family, User
@@ -113,7 +114,7 @@ def create_family(
 
     current_user.family_id = family.id
     current_user.role = Role.creator.value
-    current_user.joined_at = datetime.utcnow()
+    current_user.joined_at = now_cn()
     session.add(current_user)
     session.commit()
     session.refresh(current_user)
@@ -135,7 +136,7 @@ def join_family(
 
     current_user.family_id = family.id
     current_user.role = Role.member.value
-    current_user.joined_at = datetime.utcnow()
+    current_user.joined_at = now_cn()
     session.add(current_user)
     session.commit()
     session.refresh(current_user)
@@ -159,7 +160,7 @@ def update_family(
     family = get_my_family(session, current_user)
     name = req.name.strip()
     family.name = name
-    family.updated_at = datetime.utcnow()
+    family.updated_at = now_cn()
     session.add(family)
     session.commit()
     session.refresh(family)
@@ -233,7 +234,7 @@ def update_standards(
     validate_standards(values)
     for key, value in values.model_dump().items():
         setattr(family, key, value)
-    family.updated_at = datetime.utcnow()
+    family.updated_at = now_cn()
     session.add(family)
     session.commit()
     session.refresh(family)
