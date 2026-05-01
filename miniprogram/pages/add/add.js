@@ -188,29 +188,52 @@ Page({
         this.setData({ voiceDisabled: true })
       } else if (errMsg.indexOf('auth deny') >= 0 || errMsg.indexOf('authorize') >= 0) {
         friendly = '麦克风权限被拒绝，请在系统设置开启微信麦克风权限'
+      } else if (errMsg.indexOf('is recording') >= 0 || errMsg.indexOf('paused') >= 0) {
+        // 残留状态，强制 stop 一次清掉，下次按住能重来
+        try { rm.stop() } catch (e) { /* noop */ }
+        friendly = '录音器忙碌，请重新长按'
       } else if (errMsg) {
         friendly = '录音失败：' + errMsg
       }
       this.setData({ recording: false, recordHint: '', error: friendly })
     })
-    rm.onInterruptionBegin(() => rm.stop())
+    rm.onInterruptionBegin(() => {
+      try { rm.stop() } catch (e) { /* noop */ }
+      this.setData({ recording: false, recordHint: '' })
+    })
     this.recorderManager = rm
   },
   onVoiceTouchStart() {
     this.ensureRecorder()
-    this.recorderManager.start({
-      duration: 60000,
-      sampleRate: 16000,
-      numberOfChannels: 1,
-      encodeBitRate: 48000,
-      format: 'mp3',
-    })
+    // 防御：如果 recorder 仍在 running 状态，先强制 stop 清状态再 start
+    if (this.data.recording) {
+      try { this.recorderManager.stop() } catch (e) { /* noop */ }
+      this.setData({ recording: false, recordHint: '' })
+    }
+    this.setData({ error: '' })
+    setTimeout(() => {
+      try {
+        this.recorderManager.start({
+          duration: 60000,
+          sampleRate: 16000,
+          numberOfChannels: 1,
+          encodeBitRate: 48000,
+          format: 'mp3',
+        })
+      } catch (e) {
+        this.setData({ error: '录音启动失败，请重试' })
+      }
+    }, 80)
   },
   onVoiceTouchEnd() {
-    if (this.data.recording) this.recorderManager.stop()
+    if (this.data.recording && this.recorderManager) {
+      try { this.recorderManager.stop() } catch (e) { /* noop */ }
+    }
   },
   onVoiceTouchCancel() {
-    if (this.data.recording) this.recorderManager.stop()
+    if (this.data.recording && this.recorderManager) {
+      try { this.recorderManager.stop() } catch (e) { /* noop */ }
+    }
   },
   async uploadVoice(filePath) {
     this.setData({ parsing: true, recordHint: '识别中…', error: '' })
