@@ -30,6 +30,7 @@ Page({
     parsing: false,
     recording: false,
     recordHint: '',
+    voiceDisabled: false,
   },
   onLoad(query) {
     const now = roundTo5Min(new Date())
@@ -180,7 +181,17 @@ Page({
       this.uploadVoice(res.tempFilePath)
     })
     rm.onError((err) => {
-      this.setData({ recording: false, recordHint: '', error: '录音失败：' + (err.errMsg || '请检查麦克风权限') })
+      const errMsg = (err && err.errMsg) || ''
+      let friendly = '录音失败，请重试'
+      if (errMsg.indexOf('scope is not declared') >= 0 || errMsg.indexOf('privacy agreement') >= 0) {
+        friendly = '语音功能开通中，本次请用文字输入'
+        this.setData({ voiceDisabled: true })
+      } else if (errMsg.indexOf('auth deny') >= 0 || errMsg.indexOf('authorize') >= 0) {
+        friendly = '麦克风权限被拒绝，请在系统设置开启微信麦克风权限'
+      } else if (errMsg) {
+        friendly = '录音失败：' + errMsg
+      }
+      this.setData({ recording: false, recordHint: '', error: friendly })
     })
     rm.onInterruptionBegin(() => rm.stop())
     this.recorderManager = rm

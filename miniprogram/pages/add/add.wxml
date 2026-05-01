@@ -41,7 +41,7 @@
         <text class="hint">{{recording ? '录音中…松开识别' : '可以打字，也可以长按下方按钮说话'}}</text>
         <text class="clear" bindtap="onClear">清空</text>
       </view>
-      <view class="voice-btn {{recording ? 'recording' : ''}}"
+      <view wx:if="{{!voiceDisabled}}" class="voice-btn {{recording ? 'recording' : ''}}"
             bindtouchstart="onVoiceTouchStart"
             bindtouchend="onVoiceTouchEnd"
             bindtouchcancel="onVoiceTouchCancel">
