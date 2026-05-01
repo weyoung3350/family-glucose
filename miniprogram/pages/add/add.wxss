@@ -4,6 +4,7 @@
 .segment .active { background: #FF9F40; color: #FFFFFF; font-weight: 800; }
 .field-label { color: #4E5969; font-size: 30rpx; margin-bottom: 18rpx; }
 .field-hint { color: #86909C; font-size: 24rpx; font-weight: 400; }
+.field-warn { color: #F5222D; font-size: 26rpx; margin-top: 14rpx; }
 .value-row { display: flex; align-items: center; gap: 14rpx; }
 .value-input { height: 82rpx; font-size: 68rpx; line-height: 82rpx; font-weight: 800; color: #FF9F40; flex: 1; }
 .value-placeholder { color: #C9CDD4; font-size: 56rpx; font-weight: 600; }

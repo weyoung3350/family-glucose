@@ -8,7 +8,13 @@ Page({
     isMine: false,
   },
   onLoad(query) {
-    this.setData({ id: Number(query.id) })
+    const id = Number(query.id)
+    if (!id || Number.isNaN(id)) {
+      wx.showToast({ title: '记录不存在', icon: 'none' })
+      setTimeout(() => wx.navigateBack(), 800)
+      return
+    }
+    this.setData({ id })
     this.loadRecord()
   },
   onShow() {

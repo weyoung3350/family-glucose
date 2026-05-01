@@ -13,6 +13,7 @@ Page({
     // manual
     value: '',
     period: 'fasting',
+    periodIncomplete: false,
     note: '',
     measuredAt: '',
     timeText: '',
@@ -64,7 +65,12 @@ Page({
   },
   onValueInput(event) { this.setData({ value: event.detail.value }) },
   onNoteInput(event) { this.setData({ note: event.detail.value }) },
-  onPeriodChange(event) { this.setData({ period: event.detail.value }) },
+  onPeriodChange(event) {
+    this.setData({
+      period: event.detail.value,
+      periodIncomplete: event.detail.complete === false,
+    })
+  },
   onTimeChange(event) {
     const [hourIdx, minuteIdx] = event.detail.value
     const d = new Date(this.data.measuredAt)
@@ -75,6 +81,10 @@ Page({
     const value = Number(this.data.value)
     if (!value || value <= 0 || value >= 50) {
       wx.showToast({ title: '血糖值需在 0-50 之间', icon: 'none' })
+      return
+    }
+    if (this.data.periodIncomplete || !this.data.period) {
+      wx.showToast({ title: '请选择餐前或餐后', icon: 'none' })
       return
     }
     if (value >= 25) {
@@ -162,13 +172,14 @@ Page({
   },
   onAiPeriodChange(event) {
     const period = event.detail.value
+    const complete = event.detail.complete !== false
     this.setData({
       'parsed.period': period,
-      'parsed.periodLabel': periodLabel(period),
+      'parsed.periodLabel': period ? periodLabel(period) : '请选择餐前或餐后',
       'parsed.period_inferred': false,
-      missing: this.data.missing.filter((item) => item !== 'period'),
-      missingText: this.buildMissingText(this.data.missing.filter((item) => item !== 'period')),
-      canSave: Boolean(this.data.parsed && this.data.parsed.value),
+      missing: complete ? this.data.missing.filter((item) => item !== 'period') : this.data.missing,
+      missingText: this.buildMissingText(complete ? this.data.missing.filter((item) => item !== 'period') : this.data.missing),
+      canSave: Boolean(this.data.parsed && this.data.parsed.value && period && complete),
     })
   },
   onNoteEdit() {

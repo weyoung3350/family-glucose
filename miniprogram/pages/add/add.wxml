@@ -16,6 +16,7 @@
     <view class="card">
       <view class="field-label">时段</view>
       <period-picker value="{{period}}" bind:change="onPeriodChange" />
+      <view wx:if="{{periodIncomplete}}" class="field-warn">请选择餐前或餐后</view>
     </view>
     <view class="card">
       <view class="field-label">测量时间 <text class="field-hint">（5 分钟刻度）</text></view>

@@ -1,0 +1,66 @@
+{
+  "runAt": "2026-05-01T03:00:49.881Z",
+  "apiBaseExpected": "https://glucose-api.bwton.com/api/v1",
+  "cases": {
+    "initialPeriod": "fasting",
+    "afterTapBreakfast": {
+      "pagePeriod": "fasting",
+      "pickerCurrentMeal": "breakfast",
+      "pickerCurrentBa": "",
+      "showBeforeAfter": true,
+      "baChipCount": 2
+    },
+    "afterTapBefore": {
+      "pagePeriod": "before_breakfast",
+      "pickerCurrentBa": "before"
+    },
+    "home": {
+      "title": "杨孝治的血糖记录的血糖记录",
+      "todayCount": 2,
+      "cards": 2,
+      "fabMainSize": {
+        "width": 334,
+        "height": 59
+      },
+      "fabMicSize": {
+        "width": 59,
+        "height": 59
+      }
+    },
+    "ai": {
+      "parsed": {
+        "value": 6.9,
+        "period": "fasting",
+        "period_inferred": false,
+        "measured_at": "2026-05-01T07:00:00",
+        "measured_at_inferred": false,
+        "note": "吃了二甲双胍",
+        "periodLabel": "空腹",
+        "timeText": "2026-05-01 07:00"
+      },
+      "missingText": "",
+      "canSave": true
+    },
+    "analyticsMatrix": {
+      "text": "‹ 左右滑动查看完整时段 ›\n日期\n空腹\n早前\n早后\n午前\n午后\n晚前\n晚后\n睡前\n2026-05-01\n9.4\n-\n-\n12\n-\n-\n-\n-\n2026-04-30\n-\n-\n-\n-\n-\n-\n-\n-\n2026-04-29\n-\n-\n-\n-\n-\n-\n-\n-\n2026-04-28\n-\n-\n-\n-\n-\n-\n-\n-\n2026-04-27\n-\n-\n-\n-\n-\n-\n-\n-\n2026-04-26\n-\n-\n-\n-\n-\n-\n-\n-\n2026-04-25\n-\n-\n-\n-\n-\n-\n-\n-"
+    },
+    "analyticsChart": {
+      "chartSize": {
+        "width": 404,
+        "height": 298
+      },
+      "stats": "测量次数\n2\n平均值\n10.7\n最高/最低\n12 / 9.4"
+    },
+    "me": {
+      "profile": "我\n我\n杨孝治的血糖记录 · 管理员",
+      "menuItems": 4
+    },
+    "standards": {
+      "text": "管理员 你可以编辑下方阈值，全家成员同步生效\n空腹理想区间\n下限\n4.4\n上限\n6.1\n餐后理想区间\n下限\n4.4\n上限\n7.8\n警戒值\n偏低警戒值\n3.9\n过高警戒值\n13.9\n默认值依据中国 2 型糖尿病防治指南，请遵医嘱调整。单位 mmol/L。\n保存",
+      "rows": 6
+    },
+    "export": {
+      "text": "最近 7 天\n最近 30 天\n最近 90 天\n将导出\n· 时间范围：2026-04-02 ~ 2026-05-01\n· 共 2 条记录\n· 字段：日期 / 时间 / 时段 / 血糖值 / 状态 / 记录人 / 备注\n· 格式：CSV（可用 Excel 打开）\n生成并分享 CSV\n生成后可直接转发给医生或保存到聊天"
+    }
+  }
+}

@@ -2,7 +2,7 @@
   <view wx:if="{{offlineCount > 0}}" class="offline-banner">有 {{offlineCount}} 条记录待同步，连网后自动上传</view>
   <view class="hero">
     <view>
-      <view class="title">{{family.name}}的血糖记录</view>
+      <view class="title">{{family.name}}</view>
       <view class="subtitle">{{todayLabel}}</view>
     </view>
     <view class="today-stat">
@@ -25,6 +25,6 @@
 
   <view class="fab-row">
     <view class="fab-main" bindtap="onAddTap">＋ 记一次血糖</view>
-    <view class="fab-mic" bindtap="onMicTap"><image src="/images/mic.png" mode="aspectFit" /></view>
+    <view class="fab-ai" bindtap="onMicTap">AI 录入</view>
   </view>
 </view>

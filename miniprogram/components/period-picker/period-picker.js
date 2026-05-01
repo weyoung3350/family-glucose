@@ -41,16 +41,18 @@ Component({
       const meal = e.currentTarget.dataset.key
       if (ANCHOR_KEYS.indexOf(meal) >= 0) {
         this.setData({ currentMeal: meal, currentBa: '', showBeforeAfter: false })
-        this.triggerEvent('change', { value: meal })
+        this.triggerEvent('change', { value: meal, complete: true })
       } else {
         this.setData({ currentMeal: meal, currentBa: '', showBeforeAfter: true })
+        // 餐次选了但餐前/餐后还没选 → 通知父页面 period 暂时无效，禁止保存
+        this.triggerEvent('change', { value: '', complete: false })
       }
     },
     onBaPick(e) {
       const ba = e.currentTarget.dataset.ba
       const value = `${ba}_${this.data.currentMeal}`
       this.setData({ currentBa: ba })
-      this.triggerEvent('change', { value })
+      this.triggerEvent('change', { value, complete: true })
     },
   },
 })
