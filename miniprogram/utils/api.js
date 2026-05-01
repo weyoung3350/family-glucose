@@ -89,8 +89,40 @@ const api = {
   report: (query) => request('GET', '/analytics/report', { query }),
   csvUrl: (query) => appendQuery(`${API_BASE}/export/csv`, { ...query, token: getApp().globalData.token }),
   parseRecord: (text) => request('POST', '/ai/parse-record', { data: { text } }),
+  parseVoice: (filePath) => uploadFile('/ai/parse-voice', filePath, 'audio'),
   getMe: () => request('GET', '/users/me'),
   updateProfile: (data) => request('PATCH', '/users/me', { data }),
+}
+
+function uploadFile(path, filePath, name) {
+  const app = getApp()
+  return new Promise((resolve, reject) => {
+    wx.uploadFile({
+      url: API_BASE + path,
+      filePath,
+      name,
+      timeout: 25000,
+      header: {
+        ...(app.globalData.token ? { Authorization: `Bearer ${app.globalData.token}` } : {}),
+      },
+      success: (res) => {
+        let data = {}
+        try { data = JSON.parse(res.data || '{}') } catch (e) { /* noop */ }
+        if (res.statusCode >= 200 && res.statusCode < 300) {
+          resolve(data)
+        } else {
+          reject(data && data.code ? data : { code: 'ERR_HTTP', message: data.message || '上传失败' })
+        }
+      },
+      fail: (err) => {
+        const isTimeout = err && err.errMsg && err.errMsg.indexOf('timeout') >= 0
+        reject({
+          code: isTimeout ? 'ERR_TIMEOUT' : 'ERR_NETWORK',
+          message: isTimeout ? '请求超时，请检查网络后重试' : '无法连接服务器',
+        })
+      },
+    })
+  })
 }
 
 module.exports = { api, relogin, request }

@@ -38,10 +38,17 @@
     <view class="card input-card">
       <textarea value="{{text}}" bindinput="onTextInput" placeholder="试试说：早上 9:20 空腹血糖 11.1，吃了二甲双胍" auto-focus maxlength="200" />
       <view class="input-actions">
-        <text class="hint">语音功能开发中，请文字输入</text>
+        <text class="hint">{{recording ? '录音中…松开识别' : '可以打字，也可以长按下方按钮说话'}}</text>
         <text class="clear" bindtap="onClear">清空</text>
       </view>
-      <view class="btn-primary recognize-btn {{(text && !parsing) ? '' : 'disabled'}}" bindtap="onRecognize">{{parsing ? '识别中…' : '点击识别'}}</view>
+      <view class="voice-btn {{recording ? 'recording' : ''}}"
+            bindtouchstart="onVoiceTouchStart"
+            bindtouchend="onVoiceTouchEnd"
+            bindtouchcancel="onVoiceTouchCancel">
+        <view class="voice-dot"></view>
+        <text>{{recording ? '松开发送' : '按住说话'}}</text>
+      </view>
+      <view class="btn-primary recognize-btn {{(text && !parsing) ? '' : 'disabled'}}" bindtap="onRecognize">{{parsing ? (recordHint || '识别中…') : '点击识别'}}</view>
       <view wx:if="{{error}}" class="error">{{error}}</view>
     </view>
 

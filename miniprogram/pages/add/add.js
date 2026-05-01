@@ -28,6 +28,8 @@ Page({
     canSave: false,
     error: '',
     parsing: false,
+    recording: false,
+    recordHint: '',
   },
   onLoad(query) {
     const now = roundTo5Min(new Date())
@@ -159,6 +161,70 @@ Page({
   onRecognize() {
     if (!this.data.text.trim() || this.data.parsing) return
     this.parseText()
+  },
+
+  // ---------- 语音录入 ----------
+  ensureRecorder() {
+    if (this.recorderManager) return
+    const rm = wx.getRecorderManager()
+    rm.onStart(() => {
+      this.setData({ recording: true, error: '', recordHint: '正在录音…松开识别' })
+    })
+    rm.onStop((res) => {
+      this.setData({ recording: false, recordHint: '' })
+      if (!res || !res.tempFilePath) return
+      if (res.duration < 800) {
+        this.setData({ error: '录音太短，至少说一句话' })
+        return
+      }
+      this.uploadVoice(res.tempFilePath)
+    })
+    rm.onError((err) => {
+      this.setData({ recording: false, recordHint: '', error: '录音失败：' + (err.errMsg || '请检查麦克风权限') })
+    })
+    rm.onInterruptionBegin(() => rm.stop())
+    this.recorderManager = rm
+  },
+  onVoiceTouchStart() {
+    this.ensureRecorder()
+    this.recorderManager.start({
+      duration: 60000,
+      sampleRate: 16000,
+      numberOfChannels: 1,
+      encodeBitRate: 48000,
+      format: 'mp3',
+    })
+  },
+  onVoiceTouchEnd() {
+    if (this.data.recording) this.recorderManager.stop()
+  },
+  onVoiceTouchCancel() {
+    if (this.data.recording) this.recorderManager.stop()
+  },
+  async uploadVoice(filePath) {
+    this.setData({ parsing: true, recordHint: '识别中…', error: '' })
+    try {
+      const res = await api.parseVoice(filePath)
+      const parsed = res.parsed || {}
+      parsed.periodLabel = parsed.period ? periodLabel(parsed.period) : ''
+      parsed.timeText = parsed.measured_at ? formatDate(parsed.measured_at, 'YYYY-MM-DD HH:mm') : ''
+      this.setData({
+        text: res.raw_text || '',
+        parsed,
+        missing: res.missing || [],
+        missingText: this.buildMissingText(res.missing || []),
+        canSave: Boolean(parsed.value && parsed.period),
+      })
+    } catch (err) {
+      let msg = '语音识别失败，请重试'
+      if (err.code === 'ERR_AUDIO_TOO_LARGE') msg = '录音过长，请缩短到 60 秒内'
+      else if (err.code === 'ERR_ASR_EMPTY') msg = '没听清，请再说一遍'
+      else if (err.code === 'ERR_NETWORK' || err.code === 'ERR_TIMEOUT') msg = err.message
+      else if (err.message) msg = err.message
+      this.setData({ error: msg })
+    } finally {
+      this.setData({ parsing: false, recordHint: '' })
+    }
   },
   onValueEdit() {
     wx.showModal({

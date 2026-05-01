@@ -18,6 +18,11 @@
 .input-actions { display: flex; align-items: center; gap: 14rpx; color: #86909C; margin: 18rpx 0; font-size: 26rpx; }
 .input-actions .hint { color: #86909C; }
 .clear { margin-left: auto; color: #F08A2C; }
+.voice-btn { display: flex; align-items: center; justify-content: center; gap: 14rpx; height: 96rpx; border-radius: 999rpx; background: #FFF7ED; border: 2rpx solid #FFD9A8; color: #F08A2C; font-size: 30rpx; font-weight: 700; margin-top: 12rpx; user-select: none; }
+.voice-btn.recording { background: #FF9F40; border-color: #FF9F40; color: #FFFFFF; }
+.voice-dot { width: 14rpx; height: 14rpx; border-radius: 50%; background: #F08A2C; }
+.voice-btn.recording .voice-dot { background: #FFFFFF; animation: voicePulse 0.8s infinite; }
+@keyframes voicePulse { 0%,100% { transform: scale(1); opacity: 1 } 50% { transform: scale(1.6); opacity: .5 } }
 .recognize-btn { margin-top: 12rpx; }
 .recognize-btn.disabled { opacity: .45; }
 .error,.missing { color: #F5222D; font-size: 28rpx; margin-top: 14rpx; }

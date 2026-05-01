@@ -19,7 +19,16 @@ Page({
     this.setData({ family: res.family, members, isCreator: res.family.role_of_me === 'creator' })
   },
   copyCode() {
-    wx.setClipboardData({ data: this.data.family.invite_code })
+    const code = this.data.family && this.data.family.invite_code
+    if (!code) {
+      wx.showToast({ title: '邀请码不可用', icon: 'none' })
+      return
+    }
+    wx.setClipboardData({
+      data: code,
+      success: () => wx.showToast({ title: '邀请码已复制', icon: 'success' }),
+      fail: () => wx.showToast({ title: '复制失败，请手动选择长按复制', icon: 'none' }),
+    })
   },
   editName() {
     wx.showModal({

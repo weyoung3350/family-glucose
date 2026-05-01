@@ -23,6 +23,12 @@ class Settings(BaseSettings):
     DEEPSEEK_BASE_URL: str = "https://api.deepseek.com/v1"
     LLM_TIMEOUT_SEC: int = 5
 
+    # 阿里 DashScope（语音识别用 qwen-audio-turbo）
+    DASHSCOPE_API_KEY: str = ""
+    DASHSCOPE_BASE_URL: str = "https://dashscope.aliyuncs.com/api/v1"
+    ASR_TIMEOUT_SEC: int = 20
+    ASR_MAX_BYTES: int = 5 * 1024 * 1024  # 5MB
+
     DATABASE_URL: str = "sqlite:///./data/glucose.db"
     LOG_LEVEL: str = "INFO"
     CORS_ORIGINS_RAW: str = Field(
