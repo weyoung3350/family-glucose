@@ -40,13 +40,9 @@ server {
         proxy_connect_timeout 5s;
     }
 
-    location = /health {
-        return 200 "ok";
-        add_header Content-Type text/plain;
-    }
-
-    # 屏蔽根路径（小程序后端不需要 web 入口）
+    # 根路径返回友好 JSON（部署/排障可用）
     location = / {
-        return 404;
+        default_type application/json;
+        return 200 '{"app":"家有糖人 API","status":"ok","docs":"https://glucose-api.bwton.com/api/v1/health"}';
     }
 }
