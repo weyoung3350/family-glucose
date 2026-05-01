@@ -137,8 +137,38 @@ def extract_period(text: str, measured_at: Optional[datetime], now: datetime) ->
     return None, False, []
 
 
+def cn_to_int(s: str) -> Optional[int]:
+    """中文整数解析：'十二'→12，'二十一'→21，'十'→10，'三'→3。"""
+    if not s:
+        return None
+    if s in CN_NUMBERS:
+        return CN_NUMBERS[s]
+    if "十" in s:
+        a, _, b = s.partition("十")
+        tens = CN_NUMBERS.get(a, 1) if a else 1
+        ones = CN_NUMBERS.get(b, 0) if b else 0
+        if isinstance(tens, int) and isinstance(ones, int) and 0 <= tens <= 9 and 0 <= ones <= 9:
+            return tens * 10 + ones
+    return None
+
+
+def cn_to_float(s: str) -> Optional[float]:
+    """中文小数解析：'七点八'→7.8，'十二点五'→12.5，'十二'→12.0。"""
+    if "点" in s:
+        a, _, b = s.partition("点")
+        ai = cn_to_int(a) if a else 0
+        bi = cn_to_int(b) if b else None
+        if ai is not None and bi is not None:
+            digits = max(1, len(b))
+            return ai + bi / (10 ** digits)
+        return None
+    val = cn_to_int(s)
+    return float(val) if val is not None else None
+
+
 def extract_value(text: str) -> tuple[Optional[float], list[str]]:
     candidates = []
+    # 1. 阿拉伯数字
     for match in re.finditer(r"(\d+(?:[.．]\d+)?)", text):
         value = float(match.group(1).replace("．", "."))
         prefix = text[max(0, match.start() - 2) : match.start()]
@@ -148,6 +178,21 @@ def extract_value(text: str) -> tuple[Optional[float], list[str]]:
         if 4 <= value <= 30:
             priority = 0 if "血糖" in text[max(0, match.start() - 6) : match.end() + 6] else 1
             candidates.append((priority, match.start(), value, match.group(0)))
+    # 2. 中文数字（仅在紧邻"血糖"或"糖"时识别，避免误吃"晚上八点"中的"八"）
+    cn_pattern = r"([零一二两三四五六七八九十]+(?:点[零一二两三四五六七八九十]+)?)"
+    for match in re.finditer(cn_pattern, text):
+        raw = match.group(1)
+        value = cn_to_float(raw)
+        if value is None:
+            continue
+        prefix = text[max(0, match.start() - 4) : match.start()]
+        suffix = text[match.end() : match.end() + 3]
+        # 必须明确指向血糖：前文有"血糖"/"糖"或后文有"mmol"
+        if not ("血糖" in prefix or "糖" in prefix or "mmol" in suffix.lower()):
+            continue
+        # "X点" 类似"两点"="2:00"，单 char + "点" 后面跟数字时段更像时间，跳过
+        if 4 <= value <= 30:
+            candidates.append((0, match.start(), value, raw))
     if not candidates:
         return None, []
     _, _, value, raw = sorted(candidates)[0]
