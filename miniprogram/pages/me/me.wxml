@@ -1,8 +1,8 @@
 <view class="page me-page">
-  <view class="profile">
+  <view class="profile" bindtap="editNickname">
     <view class="avatar">{{avatarText}}</view>
-    <view>
-      <view class="nickname">{{user.nickname || '我'}}</view>
+    <view class="profile-main">
+      <view class="nickname">{{user.nickname || '设置昵称'}}<text class="edit-hint">› 编辑</text></view>
       <view class="family">{{family.name || '未加入家庭'}} · {{roleText}}</view>
     </view>
   </view>

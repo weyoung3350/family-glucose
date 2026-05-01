@@ -1,6 +1,8 @@
 .profile { background: linear-gradient(135deg, #FFB066, #FF9F40); color: #FFFFFF; border-radius: 32rpx; padding: 38rpx; display: flex; align-items: center; gap: 24rpx; margin-bottom: 24rpx; }
-.avatar { width: 108rpx; height: 108rpx; border-radius: 50%; background: rgba(255,255,255,.25); display: flex; align-items: center; justify-content: center; font-size: 48rpx; font-weight: 900; }
-.nickname { font-size: 40rpx; font-weight: 900; }
+.avatar { width: 108rpx; height: 108rpx; border-radius: 50%; background: rgba(255,255,255,.25); display: flex; align-items: center; justify-content: center; font-size: 48rpx; font-weight: 900; flex-shrink: 0; }
+.profile-main { flex: 1; min-width: 0; }
+.nickname { font-size: 40rpx; font-weight: 900; display: flex; align-items: center; }
+.edit-hint { font-size: 24rpx; opacity: .85; margin-left: 16rpx; font-weight: 400; }
 .family { margin-top: 10rpx; opacity: .9; }
 .menu-item { display: grid; grid-template-columns: 64rpx 1fr 30rpx; align-items: center; padding: 28rpx 0; border-bottom: 1rpx solid #F2F3F5; gap: 18rpx; }
 .menu-item:last-child { border-bottom: none; }

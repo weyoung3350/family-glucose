@@ -16,6 +16,11 @@ class UserDTO(BaseModel):
     role: Optional[str]
 
 
+class UpdateProfileRequest(BaseModel):
+    nickname: Optional[str] = None
+    avatar_url: Optional[str] = None
+
+
 class FamilyDTO(BaseModel):
     id: int
     name: str

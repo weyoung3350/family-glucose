@@ -8,7 +8,7 @@ from sqlmodel import Session, select
 
 from app.deps import get_current_user, get_session
 from app.models import Family, User
-from app.schemas.auth import FamilyDTO, LoginRequest, LoginResponse, UserDTO
+from app.schemas.auth import FamilyDTO, LoginRequest, LoginResponse, UpdateProfileRequest, UserDTO
 from app.security import create_access_token
 from app.services.wechat import WechatLoginError, code_to_openid
 
@@ -115,3 +115,30 @@ async def login(
 @router.get("/api/v1/me")
 def get_me(user: User = Depends(get_current_user)) -> dict[str, int]:
     return {"id": user.id}
+
+
+@router.patch("/api/v1/users/me", response_model=UserDTO)
+def update_profile(
+    req: UpdateProfileRequest,
+    user: User = Depends(get_current_user),
+    session: Session = Depends(get_session),
+) -> UserDTO:
+    if req.nickname is not None:
+        nickname = req.nickname.strip()
+        if not nickname:
+            raise HTTPException(
+                status_code=400,
+                detail={"code": "ERR_NICKNAME_EMPTY", "message": "昵称不能为空"},
+            )
+        if len(nickname) > 20:
+            raise HTTPException(
+                status_code=400,
+                detail={"code": "ERR_NICKNAME_TOO_LONG", "message": "昵称最多 20 个字"},
+            )
+        user.nickname = nickname
+    if req.avatar_url is not None:
+        user.avatar_url = req.avatar_url
+    session.add(user)
+    session.commit()
+    session.refresh(user)
+    return build_user_dto(user)
