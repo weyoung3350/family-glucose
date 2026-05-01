@@ -7,6 +7,7 @@ from sqlmodel import Session, select
 from app.deps import get_current_user, get_session, require_creator, require_family
 from app.enums import Role
 from app.models import Family, User
+from app.routers.auth import display_nickname
 from app.schemas.family import (
     CreateFamilyRequest,
     FamilyDetailResponse,
@@ -61,7 +62,7 @@ def build_detail(session: Session, family: Family, current_user: User) -> Family
         members=[
             MemberDTO(
                 id=member.id,
-                nickname=member.nickname,
+                nickname=display_nickname(member),
                 avatar_url=member.avatar_url,
                 role=member.role or "",
                 joined_at=member.joined_at,

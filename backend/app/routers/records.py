@@ -42,6 +42,7 @@ def get_record_in_family(session: Session, record_id: int, family_id: int) -> Gl
 
 
 def build_record_dto(session: Session, record: GlucoseRecord, family: Family) -> RecordDTO:
+    from app.routers.auth import display_nickname
     recorder = session.get(User, record.recorder_id)
     status = grade_with_meta(record.value, record.period, family)
     return RecordDTO(
@@ -54,7 +55,7 @@ def build_record_dto(session: Session, record: GlucoseRecord, family: Family) ->
         source=record.source,
         recorder=RecorderDTO(
             id=recorder.id if recorder else record.recorder_id,
-            nickname=recorder.nickname if recorder else "",
+            nickname=display_nickname(recorder) if recorder else "家人",
             avatar_url=recorder.avatar_url if recorder else None,
         ),
         status=StatusDTO(**status),

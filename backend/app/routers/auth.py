@@ -52,10 +52,18 @@ def build_family_dto(user: User, session: Session) -> FamilyDTO | None:
     )
 
 
+def display_nickname(user: User) -> str:
+    """用户没主动设昵称时用 '家人' + openid 末 4 位兜底，确保多家人可区分。"""
+    if user.nickname and user.nickname.strip():
+        return user.nickname
+    suffix = (user.openid or "")[-4:] or "0000"
+    return f"家人{suffix}"
+
+
 def build_user_dto(user: User) -> UserDTO:
     return UserDTO(
         id=user.id,
-        nickname=user.nickname,
+        nickname=display_nickname(user),
         avatar_url=user.avatar_url,
         role=user.role,
     )
