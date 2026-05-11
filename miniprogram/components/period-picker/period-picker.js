@@ -28,6 +28,11 @@ Component({
   },
   observers: {
     value(v) {
+      // 父页 setData period='' 是子组件 triggerEvent(complete:false) 的回环，
+      // 此时本组件正处于"已选 meal，等待餐前/餐后"中间态，跳过重置避免清空 UI
+      if (!v && this.data.currentMeal && !this.data.currentBa && ANCHOR_KEYS.indexOf(this.data.currentMeal) < 0) {
+        return
+      }
       const { meal, ba } = splitValue(v)
       this.setData({
         currentMeal: meal,
