@@ -61,3 +61,7 @@ package-lock.json
 # 临时
 /tmp/
 *.tmp
+
+# 本机辅助（不入库）
+.claude/
+start.sh
