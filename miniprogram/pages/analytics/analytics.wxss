@@ -8,8 +8,9 @@
 .matrix-row { margin-bottom: 12rpx; }
 .date { font-size: 26rpx; color: #4E5969; }
 .cell { height: 88rpx; border-radius: 14rpx; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 30rpx; font-weight: 600; }
-.chips { display: flex; gap: 14rpx; margin-bottom: 18rpx; }
-.chips > view { background: #FFFFFF; border-radius: 999rpx; padding: 16rpx 24rpx; color: #4E5969; }
+.chips-scroll { white-space: nowrap; margin-bottom: 18rpx; }
+.chips { display: inline-flex; gap: 14rpx; padding: 2rpx; }
+.chips > view { background: #FFFFFF; border-radius: 999rpx; padding: 16rpx 28rpx; color: #4E5969; font-size: 28rpx; flex-shrink: 0; }
 .chips .active { background: #FF9F40; color: #FFFFFF; }
 .chart-box { height: 520rpx; position: relative; padding: 0; overflow: hidden; }
 .trend-canvas { width: 100%; height: 520rpx; display: block; }

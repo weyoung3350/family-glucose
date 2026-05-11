@@ -47,33 +47,13 @@ Page({
   },
   async loadChart() {
     const query = this.rangeQuery(this.data.rangeDays.chart)
-    if (this.data.chartFilter === 'fasting') query.period = 'fasting'
+    const filter = this.data.chartFilter
+    if (filter !== 'all') query.period = filter
     const res = await api.chart(query)
-    let points = res.points
-    if (this.data.chartFilter === 'after') points = points.filter((p) => p.period.indexOf('after_') === 0)
-    const stats = this.data.chartFilter === 'after' ? this.buildStats(points) : res.stats
     this.setData({
-      chart: { ...res, points, stats },
-      distributionRows: this.buildDistributionRows(stats),
+      chart: res,
+      distributionRows: this.buildDistributionRows(res.stats),
     }, () => this.drawTrend())
-  },
-  buildStats(points) {
-    const values = points.map((p) => Number(p.value))
-    const distribution = gradeLevels.reduce((acc, item) => {
-      acc[item.key] = 0
-      return acc
-    }, {})
-    points.forEach((point) => {
-      distribution[point.status.level] = (distribution[point.status.level] || 0) + 1
-    })
-    const sum = values.reduce((acc, value) => acc + value, 0)
-    return {
-      count: points.length,
-      avg: values.length ? Math.round((sum / values.length) * 10) / 10 : null,
-      max: values.length ? Math.max(...values) : null,
-      min: values.length ? Math.min(...values) : null,
-      distribution,
-    }
   },
   buildDistributionRows(stats) {
     const count = stats.count || 0

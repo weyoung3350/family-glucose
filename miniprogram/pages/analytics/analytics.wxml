@@ -20,11 +20,16 @@
   </view>
 
   <view wx:if="{{tab === 'chart'}}">
-    <view class="chips">
-      <view class="{{chartFilter === 'all' ? 'active' : ''}}" data-filter="all" bindtap="setChartFilter">全部时段</view>
-      <view class="{{chartFilter === 'fasting' ? 'active' : ''}}" data-filter="fasting" bindtap="setChartFilter">空腹</view>
-      <view class="{{chartFilter === 'after' ? 'active' : ''}}" data-filter="after" bindtap="setChartFilter">餐后</view>
-    </view>
+    <scroll-view scroll-x="true" class="chips-scroll">
+      <view class="chips">
+        <view class="{{chartFilter === 'all' ? 'active' : ''}}" data-filter="all" bindtap="setChartFilter">全部</view>
+        <view class="{{chartFilter === 'fasting' ? 'active' : ''}}" data-filter="fasting" bindtap="setChartFilter">空腹</view>
+        <view class="{{chartFilter === 'after_breakfast' ? 'active' : ''}}" data-filter="after_breakfast" bindtap="setChartFilter">早餐后</view>
+        <view class="{{chartFilter === 'after_lunch' ? 'active' : ''}}" data-filter="after_lunch" bindtap="setChartFilter">午餐后</view>
+        <view class="{{chartFilter === 'after_dinner' ? 'active' : ''}}" data-filter="after_dinner" bindtap="setChartFilter">晚餐后</view>
+        <view class="{{chartFilter === 'bedtime' ? 'active' : ''}}" data-filter="bedtime" bindtap="setChartFilter">睡前</view>
+      </view>
+    </scroll-view>
     <view class="card chart-box" wx:if="{{chart}}">
       <canvas type="2d" id="trendCanvas" class="trend-canvas"></canvas>
       <view wx:if="{{chart.points.length === 0}}" class="empty-chart">暂无趋势数据</view>

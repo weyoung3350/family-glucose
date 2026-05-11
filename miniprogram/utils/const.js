@@ -34,6 +34,6 @@ const USE_LOCAL = false
 const API_BASE = USE_LOCAL
   ? 'http://localhost:8080/api/v1'
   : 'https://glucose-api.bwton.com/api/v1'
-const APP_VERSION = 'v0.1.16'
+const APP_VERSION = 'v0.1.17'
 
 module.exports = { PERIODS, PERIOD_MAP, GRADE_LABELS, GRADE_COLORS, GRADE_TEXT_COLORS, API_BASE, APP_VERSION }
